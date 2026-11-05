@@ -133,12 +133,18 @@
     });
   });
 
-  const replies = [
-    "Thanks — a Fundora specialist will reply shortly during support hours.",
-    "You can also check Challenges and FAQ on the homepage while you wait.",
-    "For account access issues, use Forgot password or email support@fundora.com.",
-  ];
-  let replyIndex = 0;
+  const STORAGE_KEY = "fundora_support_ticket";
+  let ticketId = "";
+  let visitorKey = "";
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    if (saved && saved.ticketId) {
+      ticketId = String(saved.ticketId);
+      visitorKey = String(saved.visitorKey || "");
+    }
+  } catch (_) {
+    /* ignore */
+  }
 
   const escapeHtml = (value) =>
     value
@@ -158,17 +164,76 @@
     thread.scrollTop = thread.scrollHeight;
   };
 
-  form.addEventListener("submit", (e) => {
+  const persistTicket = () => {
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ ticketId, visitorKey })
+      );
+    } catch (_) {
+      /* ignore */
+    }
+  };
+
+  const loadHistory = async () => {
+    if (!ticketId) return;
+    try {
+      const q = new URLSearchParams({ id: ticketId });
+      if (visitorKey) q.set("visitorKey", visitorKey);
+      const res = await fetch(`/api/tickets?${q}`, { credentials: "same-origin" });
+      const data = await res.json();
+      if (!res.ok || !data.ok) return;
+      thread.innerHTML = "";
+      (data.messages || []).forEach((m) => {
+        addBubble(m.body, m.author === "admin" ? "agent" : "user");
+      });
+      if (!(data.messages || []).length) {
+        addBubble(
+          "Hi — welcome to Fundora support. Ask about challenges, rewards, or your account.",
+          "agent"
+        );
+      }
+    } catch (_) {
+      /* keep default greeting */
+    }
+  };
+
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const text = input.value.trim();
     if (!text) return;
     addBubble(text, "user");
     input.value = "";
-    window.setTimeout(() => {
-      addBubble(replies[replyIndex % replies.length], "agent");
-      replyIndex += 1;
-    }, 700);
+    try {
+      const res = await fetch("/api/tickets", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ticketId: ticketId || undefined,
+          visitorKey: visitorKey || undefined,
+          message: text,
+          subject: "Website support",
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        addBubble(data.error || "Could not send — try again shortly.", "agent");
+        return;
+      }
+      ticketId = String(data.ticketId || ticketId);
+      if (data.visitorKey) visitorKey = String(data.visitorKey);
+      persistTicket();
+      addBubble(
+        "Thanks — a Fundora specialist will reply in Call. You can keep chatting here.",
+        "agent"
+      );
+    } catch (_) {
+      addBubble("Network error — please try again.", "agent");
+    }
   });
+
+  loadHistory();
 
   const bootOpen = () => {
     if (!wantOpen()) return;
