@@ -1,8 +1,5 @@
-/* Auth helpers — password toggle + demo register/login → portal */
+/* Auth — password toggle + Neon API register/login/forgot */
 (function () {
-  const USERS_KEY = "fundora_users";
-  const SESSION_KEY = "fundora_session";
-
   document.querySelectorAll("[data-toggle-password]").forEach((btn) => {
     const target = document.getElementById(btn.getAttribute("data-toggle-password"));
     if (!target) return;
@@ -15,22 +12,6 @@
       btn.classList.toggle("is-visible", show);
     });
   });
-
-  function readUsers() {
-    try {
-      return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-    } catch {
-      return [];
-    }
-  }
-
-  function writeUsers(users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }
-
-  function setSession(email) {
-    localStorage.setItem(SESSION_KEY, JSON.stringify({ email, at: Date.now() }));
-  }
 
   function showFormError(form, message) {
     let el = form.querySelector(".auth-error");
@@ -56,147 +37,155 @@
     return el ? el.value.trim() : "";
   }
 
-  function hasSession() {
-    try {
-      const session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
-      if (!session || !session.email) return false;
-      return readUsers().some((u) => u.email.toLowerCase() === session.email.toLowerCase());
-    } catch {
-      return false;
-    }
+  async function api(path, body) {
+    const res = await fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify(body || {}),
+    });
+    const data = await res.json().catch(() => ({}));
+    return { res, data };
   }
 
-  /* Register → portal */
-  const isRegisterPage = /register\.html$/i.test(location.pathname) || document.title.includes("Create account");
-  const isLoginPage = /login\.html$/i.test(location.pathname) || document.title.includes("Sign in");
+  const isRegisterPage =
+    /register\.html$/i.test(location.pathname) || document.title.includes("Create account");
+  const isLoginPage =
+    /login\.html$/i.test(location.pathname) || document.title.includes("Sign in");
+  const isForgotPage =
+    /forgot\.html$/i.test(location.pathname) || document.title.includes("Forgot password");
 
-  if ((isRegisterPage || isLoginPage) && hasSession()) {
-    window.location.replace("/portal/index.html");
-    return;
+  /* If already signed in, go to portal */
+  if (isRegisterPage || isLoginPage) {
+    fetch("/api/auth/me", { credentials: "same-origin" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data && data.ok) location.replace("/portal/index.html");
+      })
+      .catch(() => {});
   }
 
   if (isRegisterPage) {
     const form = document.querySelector("main form");
     if (form) {
-      form.removeAttribute("onsubmit");
-      form.addEventListener("submit", (e) => {
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
         clearFormError(form);
-
-        const name = val("name");
-        const email = val("email");
-        const country = val("country");
-        const phone = val("phone");
-        const city = val("city");
-        const experience = val("experience");
-        const platform = val("platform");
-        const referral = val("referral");
-        const password = val("password");
-        const confirm = val("confirm");
-
-        if (!name || !email || !password) {
-          showFormError(form, "Please fill in the required fields.");
-          return;
+        const payload = {
+          name: val("name"),
+          email: val("email"),
+          country: val("country"),
+          phone: val("phone"),
+          city: val("city"),
+          experience: val("experience"),
+          platform: val("platform"),
+          referral: val("referral"),
+          password: val("password"),
+          confirm: val("confirm"),
+        };
+        try {
+          const { res, data } = await api("/api/auth/register", payload);
+          if (!res.ok || !data.ok) {
+            showFormError(form, data.error || "Registration failed");
+            return;
+          }
+          location.href = data.redirect || "/portal/index.html";
+        } catch {
+          showFormError(form, "Could not reach server. Start with npm run dev.");
         }
-        if (password.length < 8) {
-          showFormError(form, "Password must be at least 8 characters.");
-          return;
-        }
-        if (password !== confirm) {
-          showFormError(form, "Passwords do not match.");
-          return;
-        }
-
-        const users = readUsers();
-        if (users.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
-          showFormError(form, "An account with this email already exists. Sign in instead.");
-          return;
-        }
-
-        users.push({
-          name,
-          email,
-          country,
-          phone,
-          city,
-          experience,
-          platform,
-          referral,
-          password,
-          createdAt: Date.now(),
-        });
-        writeUsers(users);
-        setSession(email);
-        window.location.href = "/portal/index.html";
       });
     }
   }
 
-  /* Login → portal */
   if (isLoginPage) {
     const form = document.querySelector("main form");
     if (form) {
-      form.removeAttribute("onsubmit");
-      form.addEventListener("submit", (e) => {
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
         clearFormError(form);
-
-        const email = val("email");
-        const password = val("password");
-        const users = readUsers();
-        const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-
-        if (!user || user.password !== password) {
-          showFormError(form, "Invalid email or password.");
-          return;
+        try {
+          const { res, data } = await api("/api/auth/login", {
+            email: val("email"),
+            password: val("password"),
+          });
+          if (!res.ok || !data.ok) {
+            showFormError(form, data.error || "Invalid email or password");
+            return;
+          }
+          location.href = data.redirect || "/portal/index.html";
+        } catch {
+          showFormError(form, "Could not reach server. Start with npm run dev.");
         }
-
-        setSession(user.email);
-        window.location.href = "/portal/index.html";
       });
     }
   }
 
-  /* Continue with Google (UI demo — real OAuth later) */
-  function continueWithGoogle(btn) {
-    btn.disabled = true;
-    const original = btn.innerHTML;
-    btn.textContent = "Connecting…";
+  if (isForgotPage) {
+    const form = document.querySelector("main form");
+    const params = new URLSearchParams(location.search);
+    const resetToken = params.get("token");
 
-    window.setTimeout(() => {
-      const email = "google.trader@fundora.app";
-      const users = readUsers();
-      let user = users.find((u) => u.email.toLowerCase() === email);
-
-      if (!user) {
-        user = {
-          name: "Google Trader",
-          email,
-          country: "",
-          phone: "",
-          city: "",
-          experience: "",
-          platform: "",
-          referral: "",
-          password: "",
-          provider: "google",
-          createdAt: Date.now(),
-        };
-        users.push(user);
-        writeUsers(users);
-      } else if (!user.provider) {
-        user.provider = "google";
-        writeUsers(users);
-      }
-
-      setSession(user.email);
-      window.location.href = "/portal/index.html";
-      btn.disabled = false;
-      btn.innerHTML = original;
-    }, 650);
+    if (form && resetToken) {
+      const title = document.querySelector(".glass h2");
+      const sub = document.querySelector(".glass .sub");
+      if (title) title.textContent = "Choose a new password";
+      if (sub) sub.textContent = "Enter and confirm your new password.";
+      form.innerHTML = `
+        <input type="hidden" id="resetToken" value="${resetToken.replace(/"/g, "")}" />
+        <div class="field">
+          <label for="password">New password</label>
+          <input id="password" type="password" required minlength="8" autocomplete="new-password" />
+        </div>
+        <div class="field">
+          <label for="confirm">Confirm password</label>
+          <input id="confirm" type="password" required minlength="8" autocomplete="new-password" />
+        </div>
+        <button class="btn" type="submit">Update password</button>
+      `;
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        clearFormError(form);
+        try {
+          const { res, data } = await api("/api/auth/reset", {
+            token: resetToken,
+            password: val("password"),
+            confirm: val("confirm"),
+          });
+          if (!res.ok || !data.ok) {
+            showFormError(form, data.error || "Reset failed");
+            return;
+          }
+          location.href = data.redirect || "/login.html";
+        } catch {
+          showFormError(form, "Could not reach server.");
+        }
+      });
+    } else if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        clearFormError(form);
+        try {
+          const { res, data } = await api("/api/auth/forgot", { email: val("email") });
+          if (!res.ok || !data.ok) {
+            showFormError(form, data.error || "Request failed");
+            return;
+          }
+          let msg = data.message || "Check your email.";
+          if (data.devResetPath) msg += ` Dev link: ${data.devResetPath}`;
+          showFormError(form, msg);
+          const err = form.querySelector(".auth-error");
+          if (err) err.style.color = "#7eb6ff";
+        } catch {
+          showFormError(form, "Could not reach server. Start with npm run dev.");
+        }
+      });
+    }
   }
 
+  /* Google button — demo notice until OAuth wired */
   document.querySelectorAll("[data-google-auth]").forEach((btn) => {
-    btn.addEventListener("click", () => continueWithGoogle(btn));
+    btn.addEventListener("click", () => {
+      alert("Google sign-in will connect after OAuth credentials are added. Use email register/login for now.");
+    });
   });
 })();

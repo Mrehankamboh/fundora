@@ -1,113 +1,23 @@
-/* Fundora portal — session guard + shared shell */
+/* Fundora portal — Neon session + shared shell */
 (function () {
-  const USERS_KEY = "fundora_users";
-  const SESSION_KEY = "fundora_session";
-
-  /* Absolute paths so links work when URL is /portal (no trailing slash) */
   const NAV = [
-    {
-      id: "dashboard",
-      href: "/portal/index.html",
-      label: "Dashboard",
-      icon: '<path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5z"/>',
-    },
-    {
-      id: "challenges",
-      href: "/portal/challenges.html",
-      label: "Challenges",
-      icon: '<path d="M4 19h16M7 16V9m5 7V5m5 11v-4"/>',
-    },
-    {
-      id: "rewards",
-      href: "/portal/rewards.html",
-      label: "Rewards",
-      icon: '<path d="M12 3v18M7 8h7a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h8"/>',
-    },
-    {
-      id: "platforms",
-      href: "/portal/platforms.html",
-      label: "Platforms",
-      icon: '<rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/>',
-    },
-    {
-      id: "rules",
-      href: "/portal/rules.html",
-      label: "Rules",
-      icon: '<path d="M7 4h10a2 2 0 0 1 2 2v14l-7-3-7 3V6a2 2 0 0 1 2-2z"/>',
-    },
-    {
-      id: "billing",
-      href: "/portal/billing.html",
-      label: "Billing",
-      icon: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/>',
-    },
-    {
-      id: "certificates",
-      href: "/portal/certificates.html",
-      label: "Certificates",
-      icon: '<circle cx="12" cy="12" r="8"/><path d="m9 12 2 2 4-4"/>',
-    },
-    {
-      id: "support",
-      href: "/portal/support.html",
-      label: "Support",
-      icon: '<path d="M8 10a4 4 0 0 1 8 0v2a4 4 0 0 1-8 0v-2z"/><path d="M4 12v1a8 8 0 0 0 16 0v-1M12 21v-2"/>',
-    },
-    {
-      id: "account",
-      href: "/portal/account.html",
-      label: "Account",
-      icon: '<circle cx="12" cy="8" r="3.5"/><path d="M5 19.5c1.6-3 4-4.5 7-4.5s5.4 1.5 7 4.5"/>',
-    },
-    {
-      id: "settings",
-      href: "/portal/settings.html",
-      label: "Settings",
-      icon: '<circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M3 12h2M19 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
-    },
+    { id: "dashboard", href: "/portal/index.html", label: "Dashboard", icon: '<path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5z"/>' },
+    { id: "challenges", href: "/portal/challenges.html", label: "Challenges", icon: '<path d="M4 19h16M7 16V9m5 7V5m5 11v-4"/>' },
+    { id: "rewards", href: "/portal/rewards.html", label: "Rewards", icon: '<path d="M12 3v18M7 8h7a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h8"/>' },
+    { id: "platforms", href: "/portal/platforms.html", label: "Platforms", icon: '<rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/>' },
+    { id: "rules", href: "/portal/rules.html", label: "Rules", icon: '<path d="M7 4h10a2 2 0 0 1 2 2v14l-7-3-7 3V6a2 2 0 0 1 2-2z"/>' },
+    { id: "billing", href: "/portal/billing.html", label: "Billing", icon: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/>' },
+    { id: "certificates", href: "/portal/certificates.html", label: "Certificates", icon: '<circle cx="12" cy="12" r="8"/><path d="m9 12 2 2 4-4"/>' },
+    { id: "support", href: "/portal/support.html", label: "Support", icon: '<path d="M8 10a4 4 0 0 1 8 0v2a4 4 0 0 1-8 0v-2z"/><path d="M4 12v1a8 8 0 0 0 16 0v-1M12 21v-2"/>' },
+    { id: "account", href: "/portal/account.html", label: "Account", icon: '<circle cx="12" cy="8" r="3.5"/><path d="M5 19.5c1.6-3 4-4.5 7-4.5s5.4 1.5 7 4.5"/>' },
+    { id: "settings", href: "/portal/settings.html", label: "Settings", icon: '<circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M3 12h2M19 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>' },
   ];
-
-  function readUsers() {
-    try {
-      return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-    } catch {
-      return [];
-    }
-  }
-
-  function writeUsers(users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }
-
-  function getSession() {
-    try {
-      return JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
-    } catch {
-      return null;
-    }
-  }
-
-  function getCurrentUser() {
-    const session = getSession();
-    if (!session || !session.email) return null;
-    const users = readUsers();
-    return users.find((u) => u.email.toLowerCase() === session.email.toLowerCase()) || null;
-  }
 
   function initials(name) {
     const parts = String(name || "F").trim().split(/\s+/).filter(Boolean);
     if (!parts.length) return "F";
     if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
     return (parts[0][0] + parts[1][0]).toUpperCase();
-  }
-
-  function requireAuth() {
-    const user = getCurrentUser();
-    if (!user) {
-      window.location.replace("/login.html");
-      return null;
-    }
-    return user;
   }
 
   function currentPageId() {
@@ -148,7 +58,6 @@
       if (toggle) toggle.setAttribute("aria-expanded", "false");
       if (backdrop) backdrop.hidden = true;
     };
-
     const openSidebar = () => {
       document.body.classList.add("sidebar-open");
       if (toggle) toggle.setAttribute("aria-expanded", "true");
@@ -161,19 +70,18 @@
         else openSidebar();
       });
     }
-
     if (backdrop) {
       backdrop.hidden = true;
       backdrop.addEventListener("click", closeSidebar);
     }
-
     if (logoutBtn) {
-      logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem(SESSION_KEY);
+      logoutBtn.addEventListener("click", async () => {
+        try {
+          await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
+        } catch (_) {}
         window.location.href = "/login.html";
       });
     }
-
     const brand = document.querySelector(".sidebar-brand");
     if (brand) brand.setAttribute("href", "/portal/index.html");
   }
@@ -183,107 +91,140 @@
     const passwordForm = document.getElementById("passwordForm");
 
     if (profileForm) {
-      const map = ["name", "email", "country", "phone", "city", "experience", "platform", "referral"];
-      map.forEach((key) => {
+      ["name", "email", "country", "phone", "city", "experience", "platform", "referral"].forEach((key) => {
         const el = document.getElementById(key);
         if (el && user[key] != null) el.value = user[key];
       });
 
-      profileForm.addEventListener("submit", (e) => {
+      profileForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const users = readUsers();
-        const idx = users.findIndex((u) => u.email.toLowerCase() === user.email.toLowerCase());
-        if (idx < 0) return;
-
-        const next = { ...users[idx] };
-        map.forEach((key) => {
+        const body = {};
+        ["name", "email", "country", "phone", "city", "experience", "platform", "referral"].forEach((key) => {
           const el = document.getElementById(key);
-          if (el) next[key] = el.value.trim();
+          if (el) body[key] = el.value.trim();
         });
-
-        const emailChanged = next.email.toLowerCase() !== users[idx].email.toLowerCase();
-        if (emailChanged) {
-          const clash = users.some(
-            (u, i) => i !== idx && u.email.toLowerCase() === next.email.toLowerCase()
-          );
-          if (clash) {
-            const notice = document.getElementById("profileNotice");
-            if (notice) {
-              notice.hidden = false;
-              notice.textContent = "That email is already registered.";
-            }
-            return;
-          }
-          localStorage.setItem(SESSION_KEY, JSON.stringify({ email: next.email }));
-        }
-
-        users[idx] = next;
-        writeUsers(users);
-        fillUser(next);
+        const res = await fetch("/api/auth/profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify(body),
+        });
+        const data = await res.json().catch(() => ({}));
         const notice = document.getElementById("profileNotice");
         if (notice) {
           notice.hidden = false;
-          notice.textContent = "Profile updated locally.";
+          notice.textContent = data.ok ? "Profile updated." : data.error || "Update failed";
         }
+        if (data.ok && data.user) fillUser(data.user);
       });
     }
 
     if (passwordForm) {
-      passwordForm.addEventListener("submit", (e) => {
+      passwordForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const currentPassword = document.getElementById("currentPassword");
-        const newPassword = document.getElementById("newPassword");
-        const confirmPassword = document.getElementById("confirmPassword");
+        const res = await fetch("/api/auth/profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({
+            currentPassword: document.getElementById("currentPassword").value,
+            newPassword: document.getElementById("newPassword").value,
+            confirmPassword: document.getElementById("confirmPassword").value,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
         const notice = document.getElementById("passwordNotice");
-
-        if (!currentPassword || !newPassword || !confirmPassword) return;
-
-        if (currentPassword.value !== user.password) {
-          if (notice) {
-            notice.hidden = false;
-            notice.textContent = "Current password is incorrect.";
-          }
-          return;
-        }
-        if (newPassword.value !== confirmPassword.value) {
-          if (notice) {
-            notice.hidden = false;
-            notice.textContent = "New passwords do not match.";
-          }
-          return;
-        }
-        if (newPassword.value.length < 8) {
-          if (notice) {
-            notice.hidden = false;
-            notice.textContent = "Password must be at least 8 characters.";
-          }
-          return;
-        }
-
-        const users = readUsers();
-        const idx = users.findIndex((u) => u.email.toLowerCase() === user.email.toLowerCase());
-        if (idx < 0) return;
-        users[idx].password = newPassword.value;
-        writeUsers(users);
-        passwordForm.reset();
         if (notice) {
           notice.hidden = false;
-          notice.textContent = "Password updated locally.";
+          notice.textContent = data.ok ? "Password updated." : data.error || "Update failed";
         }
+        if (data.ok) passwordForm.reset();
       });
     }
   }
 
-  function bindDemoForms() {
-    const rewardForm = document.getElementById("rewardForm");
-    if (rewardForm) {
-      rewardForm.addEventListener("submit", (e) => {
+  async function bindChallengesPage() {
+    const listHost = document.querySelector(".card .empty");
+    const startBtns = document.querySelectorAll("[data-start-challenge]");
+    startBtns.forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
         e.preventDefault();
+        const type = btn.getAttribute("data-start-challenge");
+        const size = Number(btn.getAttribute("data-size") || 25000);
+        const res = await fetch("/api/challenges", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ evaluationType: type, accountSize: size }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!data.ok) {
+          alert(data.error || "Could not start challenge");
+          return;
+        }
+        location.reload();
+      });
+    });
+
+    try {
+      const res = await fetch("/api/challenges", { credentials: "same-origin" });
+      const data = await res.json();
+      if (!data.ok || !data.challenges || !data.challenges.length) return;
+      const card = document.querySelector(".content .card:last-of-type");
+      if (!card) return;
+      card.innerHTML = `<div class="card-head"><div><h2>Your challenges</h2><p class="card-sub">Saved in Neon.</p></div></div>
+        <div class="table-wrap"><table><thead><tr><th>Type</th><th>Size</th><th>Fee</th><th>Status</th></tr></thead><tbody>
+        ${data.challenges
+          .map(
+            (c) =>
+              `<tr><td>${c.evaluationType}</td><td>$${Number(c.accountSize).toLocaleString()}</td><td>$${c.fee}</td><td><span class="pill pill-ok">${c.status}</span></td></tr>`
+          )
+          .join("")}
+        </tbody></table></div>`;
+    } catch (_) {}
+  }
+
+  async function bindRewardsPage() {
+    const form = document.getElementById("rewardForm");
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const res = await fetch("/api/rewards", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({
+            amount: document.getElementById("amount").value,
+            method: document.getElementById("method").value,
+            notes: document.getElementById("notes").value,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
         const notice = document.getElementById("rewardNotice");
-        if (notice) notice.hidden = false;
+        if (notice) {
+          notice.hidden = false;
+          notice.textContent = data.ok ? "Reward request saved." : data.error || "Failed";
+        }
+        if (data.ok) location.reload();
       });
     }
 
+    try {
+      const res = await fetch("/api/rewards", { credentials: "same-origin" });
+      const data = await res.json();
+      if (!data.ok || !data.rewards || !data.rewards.length) return;
+      const tbody = document.querySelector(".table-wrap tbody");
+      if (!tbody) return;
+      tbody.innerHTML = data.rewards
+        .map(
+          (r) =>
+            `<tr><td>${new Date(r.createdAt).toLocaleDateString()}</td><td>${r.method}</td><td>$${r.amount}</td><td><span class="pill pill-pending">${r.status}</span></td></tr>`
+        )
+        .join("");
+    } catch (_) {}
+  }
+
+  function bindDemoForms() {
     const supportForm = document.getElementById("supportForm");
     if (supportForm) {
       supportForm.addEventListener("submit", (e) => {
@@ -293,7 +234,6 @@
         supportForm.reset();
       });
     }
-
     const settingsForm = document.getElementById("settingsForm");
     if (settingsForm) {
       settingsForm.addEventListener("submit", (e) => {
@@ -304,12 +244,29 @@
     }
   }
 
-  const user = requireAuth();
-  if (!user) return;
+  async function boot() {
+    let user = null;
+    try {
+      const res = await fetch("/api/auth/me", { credentials: "same-origin" });
+      const data = await res.json();
+      if (!data.ok || !data.user) {
+        location.replace("/login.html");
+        return;
+      }
+      user = data.user;
+    } catch {
+      location.replace("/login.html");
+      return;
+    }
 
-  renderNav();
-  fillUser(user);
-  bindShell();
-  bindAccountForms(user);
-  bindDemoForms();
+    renderNav();
+    fillUser(user);
+    bindShell();
+    bindAccountForms(user);
+    bindDemoForms();
+    if (currentPageId() === "challenges") bindChallengesPage();
+    if (currentPageId() === "rewards") bindRewardsPage();
+  }
+
+  boot();
 })();

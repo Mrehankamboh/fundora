@@ -1,6 +1,4 @@
 node_modules/
-package-lock.json
-package.json
 _ref-frames/
 _ref-portal.mp4
 _extract-frames.cjs
@@ -11,3 +9,7 @@ Thumbs.db
 *.log
 .vscode/
 .idea/
+.env
+.env.local
+.env.*.local
+.neon/

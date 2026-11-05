@@ -1,0 +1,25 @@
+{
+  "name": "fundora",
+  "version": "1.0.0",
+  "description": "Fundora prop trading marketing site and trader portal with Neon backend",
+  "main": "server.cjs",
+  "scripts": {
+    "dev": "node server.cjs",
+    "start": "node server.cjs",
+    "build": "node scripts/check-api.cjs",
+    "test:api": "node scripts/e2e-api.cjs"
+  },
+  "keywords": [
+    "fundora",
+    "neon",
+    "prop-trading"
+  ],
+  "author": "Mrehankamboh",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@neondatabase/serverless": "^1.2.0",
+    "bcryptjs": "^3.0.3",
+    "nodemailer": "^10.3.1"
+  }
+}
