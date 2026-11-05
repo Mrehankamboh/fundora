@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account — Fundora Portal</title>
+  <link rel="icon" href="../images/logo-fundora.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/portal.css" />
+</head>
+<body data-page="account">
+  <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+  <div class="portal">
+    <aside class="sidebar" id="sidebar" aria-label="Portal navigation">
+      <a class="sidebar-brand" href="/portal/index.html">
+        <img src="../images/logo-fundora.jpg" alt="" width="40" height="40" />
+        <span>Fundora</span>
+      </a>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-foot">
+        <div class="user-chip">
+          <div class="user-avatar" id="userAvatar">F</div>
+          <div class="user-meta">
+            <strong id="userName">Trader</strong>
+            <span id="userEmail">—</span>
+          </div>
+        </div>
+        <button class="btn-logout" type="button" id="logoutBtn">Logout</button>
+      </div>
+    </aside>
+    <div class="portal-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" type="button" id="sidebarToggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+          <h1>Account</h1>
+        </div>
+        <span class="status-badge is-ok">Profile</span>
+      </header>
+      <main class="content">
+        <section class="card">
+          <div class="card-head"><div><h2>Profile</h2><p class="card-sub">Saved locally until backend is ready.</p></div></div>
+          <form id="profileForm" action="#" method="post">
+            <div class="form-grid">
+              <div class="field"><label for="name">Full name</label><input id="name" name="name" type="text" required /></div>
+              <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required /></div>
+              <div class="field"><label for="country">Country</label><input id="country" name="country" type="text" /></div>
+              <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" /></div>
+              <div class="field"><label for="city">City</label><input id="city" name="city" type="text" /></div>
+              <div class="field"><label for="experience">Trading experience</label><input id="experience" name="experience" type="text" /></div>
+              <div class="field"><label for="platform">Preferred platform</label><input id="platform" name="platform" type="text" /></div>
+              <div class="field"><label for="referral">Referral code</label><input id="referral" name="referral" type="text" /></div>
+            </div>
+            <div class="form-actions"><button class="btn btn-solid" type="submit">Save profile</button></div>
+            <p class="notice" id="profileNotice" hidden style="margin-top:1rem">Profile updated locally.</p>
+          </form>
+        </section>
+        <section class="card">
+          <div class="card-head"><div><h2>Change password</h2><p class="card-sub">Demo update in localStorage.</p></div></div>
+          <form id="passwordForm" action="#" method="post">
+            <div class="form-grid">
+              <div class="field"><label for="currentPassword">Current password</label><input id="currentPassword" type="password" required /></div>
+              <div class="field"><label for="newPassword">New password</label><input id="newPassword" type="password" required minlength="8" /></div>
+              <div class="field field-full"><label for="confirmPassword">Confirm new password</label><input id="confirmPassword" type="password" required minlength="8" /></div>
+            </div>
+            <div class="form-actions"><button class="btn btn-ghost" type="submit">Update password</button></div>
+            <p class="notice" id="passwordNotice" hidden style="margin-top:1rem"></p>
+          </form>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../js/portal.js"></script>
+</body>
+</html>

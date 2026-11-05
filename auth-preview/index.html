@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crestline Auth — Choose a style</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050b18;
+      --text: #f5f8ff;
+      --muted: #93a4c7;
+      --blue: #3b82f6;
+      --line: rgba(148, 180, 255, 0.14);
+      --font-d: "Cormorant Garamond", Georgia, serif;
+      --font-u: "DM Sans", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-u);
+      color: var(--text);
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(37, 99, 235, 0.18), transparent 55%), var(--bg);
+      padding: 3rem 1.5rem 4rem;
+    }
+    .wrap { max-width: 980px; margin: 0 auto; }
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin: 0 0 0.75rem;
+    }
+    h1 {
+      font-family: var(--font-d);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 600;
+      margin: 0 0 0.75rem;
+    }
+    .lede { color: var(--muted); max-width: 44ch; margin: 0 0 2.5rem; line-height: 1.6; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    .card {
+      border-top: 1px solid var(--line);
+      padding: 1.5rem 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .card h2 {
+      font-family: var(--font-d);
+      font-size: 1.55rem;
+      margin: 0;
+      font-weight: 600;
+    }
+    .card p { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.55; }
+    .links { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 0.5rem; }
+    a.btn {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 1rem;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+    a.solid {
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+      color: #fff;
+    }
+    a.ghost {
+      border-color: var(--line);
+      color: var(--text);
+    }
+    a.ghost:hover { border-color: var(--blue); color: #7eb6ff; }
+    .back { display: inline-block; margin-bottom: 2rem; color: var(--muted); text-decoration: none; font-size: 0.9rem; }
+    .back:hover { color: var(--text); }
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="../index.html">← Back to landing</a>
+    <p class="eyebrow">Auth previews</p>
+    <h1>Choose a login / register style</h1>
+    <p class="lede">Open each option, compare login and register, then tell me which letter to apply (A, B, or C).</p>
+
+    <div class="grid">
+      <article class="card">
+        <h2>Option A — Split</h2>
+        <p>Brand panel on the left, form on the right. Strong institutional look.</p>
+        <div class="links">
+          <a class="btn solid" href="option-a/login.html">Login</a>
+          <a class="btn ghost" href="option-a/register.html">Register</a>
+        </div>
+      </article>
+      <article class="card">
+        <h2>Option B — Center</h2>
+        <p>Centered compact form. Clean, focused, minimal chrome.</p>
+        <div class="links">
+          <a class="btn solid" href="option-b/login.html">Login</a>
+          <a class="btn ghost" href="option-b/register.html">Register</a>
+        </div>
+      </article>
+      <article class="card">
+        <h2>Option C — Immersive</h2>
+        <p>Full-bleed atmosphere with a floating form and soft glow.</p>
+        <div class="links">
+          <a class="btn solid" href="option-c/login.html">Login</a>
+          <a class="btn ghost" href="option-c/register.html">Register</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</body>
+</html>

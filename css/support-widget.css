@@ -1,0 +1,419 @@
+/* Fundora support widget — compact bottom-right, Fundora blue */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap");
+
+.fw-root {
+  --fw-panel: #0a1428;
+  --fw-bg: #050b18;
+  --fw-muted: #93a4c7;
+  --fw-blue: #3b82f6;
+  --fw-blue-soft: #7eb6ff;
+  --fw-grad: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+  --fw-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  font-family: Inter, "DM Sans", system-ui, sans-serif;
+}
+
+/* Closed: only icon, bottom-right */
+.fw-launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 90;
+  width: 54px;
+  height: 54px;
+  border: 2px solid var(--fw-blue-soft);
+  border-radius: 14px;
+  cursor: pointer;
+  color: #fff;
+  background: #12203a;
+  box-shadow:
+    0 0 0 4px rgba(59, 130, 246, 0.14),
+    0 12px 28px rgba(0, 0, 0, 0.4);
+  display: grid;
+  place-items: center;
+  transition: transform 0.2s var(--fw-ease), opacity 0.18s, visibility 0.18s;
+}
+
+.fw-launcher:hover {
+  transform: scale(1.04);
+  background: #1a2d4f;
+}
+
+.fw-launcher svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.fw-launcher.is-open {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(0.85);
+}
+
+/* Open panel: tucked bottom-right, does not cover full page */
+.fw-panel {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 91;
+  width: min(380px, calc(100vw - 32px));
+  /* stay below navbar (~72px) with a little gap */
+  height: min(560px, calc(100vh - var(--nav-h, 72px) - 36px));
+  max-height: calc(100vh - var(--nav-h, 72px) - 36px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--fw-panel);
+  border: 1px solid rgba(148, 180, 255, 0.16);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+  transform-origin: bottom right;
+  pointer-events: none;
+  transition: opacity 0.22s var(--fw-ease), transform 0.22s var(--fw-ease);
+}
+
+.fw-panel.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.fw-head {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 52px;
+  padding: 10px 12px 10px 14px;
+  background: rgba(10, 20, 40, 0.96);
+  border-bottom: 1px solid rgba(148, 180, 255, 0.1);
+}
+
+.fw-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.fw-mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid var(--fw-blue-soft);
+  box-shadow: inset 0 0 0 3px var(--fw-panel), inset 0 0 0 4px var(--fw-blue);
+}
+
+.fw-close {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.fw-close:hover {
+  background: rgba(126, 182, 255, 0.18);
+}
+
+.fw-close svg {
+  width: 11px;
+  height: 11px;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  fill: none;
+}
+
+.fw-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse 90% 50% at 50% 0%, rgba(59, 130, 246, 0.22), transparent 60%),
+    var(--fw-bg);
+}
+
+.fw-view {
+  display: none;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+}
+
+.fw-view.is-active {
+  display: flex;
+}
+
+.fw-home {
+  justify-content: flex-start;
+  padding: 18px 18px 20px;
+  gap: 18px;
+}
+
+.fw-hello {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+}
+
+.fw-hello span {
+  display: block;
+}
+
+.fw-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 12px 13px 16px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  text-align: left;
+  color: #fff;
+  background: var(--fw-grad);
+  box-shadow: 0 10px 26px rgba(37, 99, 235, 0.35);
+  transition: filter 0.15s, transform 0.15s;
+}
+
+.fw-cta:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.fw-cta strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.fw-cta small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.88;
+}
+
+.fw-cta-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.fw-cta-arrow svg {
+  width: 14px;
+  height: 14px;
+  stroke: #fff;
+  stroke-width: 2.4;
+  fill: none;
+}
+
+.fw-messages {
+  padding: 10px;
+}
+
+.fw-thread {
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(148, 180, 255, 0.1);
+}
+
+.fw-bubble {
+  max-width: 88%;
+}
+
+.fw-bubble p {
+  margin: 0;
+  padding: 9px 11px;
+  font-size: 13px;
+  line-height: 1.45;
+  border-radius: 12px;
+}
+
+.fw-bubble time {
+  display: block;
+  margin-top: 3px;
+  padding: 0 2px;
+  font-size: 10px;
+  color: var(--fw-muted);
+}
+
+.fw-agent {
+  align-self: flex-start;
+}
+
+.fw-agent p {
+  background: rgba(59, 130, 246, 0.16);
+  border: 1px solid rgba(126, 182, 255, 0.2);
+  color: #fff;
+}
+
+.fw-user {
+  align-self: flex-end;
+}
+
+.fw-user p {
+  background: var(--fw-grad);
+  color: #fff;
+}
+
+.fw-user time {
+  text-align: right;
+}
+
+.fw-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.fw-form input {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(148, 180, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.fw-form input:focus {
+  border-color: var(--fw-blue);
+}
+
+.fw-form input::placeholder {
+  color: #7a8bab;
+}
+
+.fw-send {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #fff;
+  background: var(--fw-grad);
+  display: grid;
+  place-items: center;
+}
+
+.fw-send svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  fill: none;
+}
+
+.fw-tabs {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 56px;
+  border-top: 1px solid rgba(148, 180, 255, 0.12);
+  background: #07101f;
+}
+
+.fw-tab {
+  border: none;
+  background: transparent;
+  color: var(--fw-muted);
+  cursor: pointer;
+  padding: 8px 6px 10px;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.fw-tab svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.fw-tab.is-active {
+  color: var(--fw-blue-soft);
+}
+
+@media (max-width: 980px) {
+  .fw-panel {
+    width: min(360px, calc(100vw - 28px));
+    height: min(520px, calc(100vh - var(--nav-h, 64px) - 32px));
+    max-height: calc(100vh - var(--nav-h, 64px) - 32px);
+  }
+}
+
+@media (max-width: 640px) {
+  .fw-panel {
+    right: 12px;
+    left: 12px;
+    width: auto;
+    bottom: 12px;
+    height: min(500px, calc(100vh - var(--nav-h, 64px) - 28px));
+    max-height: calc(100vh - var(--nav-h, 64px) - 28px);
+    border-radius: 16px;
+  }
+
+  .fw-launcher {
+    right: 14px;
+    bottom: 14px;
+  }
+}
+
+@media (max-height: 720px) {
+  .fw-panel {
+    height: min(480px, calc(100vh - var(--nav-h, 72px) - 28px));
+    max-height: calc(100vh - var(--nav-h, 72px) - 28px);
+  }
+
+  .fw-home {
+    padding: 14px 16px 16px;
+    gap: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fw-panel,
+  .fw-launcher {
+    transition: none;
+  }
+}

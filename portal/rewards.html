@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rewards — Fundora Portal</title>
+  <link rel="icon" href="../images/logo-fundora.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/portal.css" />
+</head>
+<body data-page="rewards">
+  <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+  <div class="portal">
+    <aside class="sidebar" id="sidebar" aria-label="Portal navigation">
+      <a class="sidebar-brand" href="/portal/index.html">
+        <img src="../images/logo-fundora.jpg" alt="" width="40" height="40" />
+        <span>Fundora</span>
+      </a>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-foot">
+        <div class="user-chip">
+          <div class="user-avatar" id="userAvatar">F</div>
+          <div class="user-meta">
+            <strong id="userName">Trader</strong>
+            <span id="userEmail">—</span>
+          </div>
+        </div>
+        <button class="btn-logout" type="button" id="logoutBtn">Logout</button>
+      </div>
+    </aside>
+    <div class="portal-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" type="button" id="sidebarToggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+          <h1>Rewards</h1>
+        </div>
+        <span class="status-badge">Payouts</span>
+      </header>
+      <main class="content">
+        <section class="grid-3">
+          <article class="stat"><p class="stat-label">Available</p><p class="stat-value">$0</p><p class="stat-note">After funded cycle</p></article>
+          <article class="stat"><p class="stat-label">Pending</p><p class="stat-value">$0</p><p class="stat-note">In review</p></article>
+          <article class="stat"><p class="stat-label">Paid lifetime</p><p class="stat-value">$0</p><p class="stat-note">All rewards</p></article>
+        </section>
+        <section class="grid-2">
+          <article class="card">
+            <div class="card-head"><div><h2>Request reward</h2><p class="card-sub">UI only for now.</p></div></div>
+            <form id="rewardForm" action="#" method="post">
+              <div class="form-grid">
+                <div class="field"><label for="amount">Amount (USD)</label><input id="amount" type="text" inputmode="decimal" placeholder="500" /></div>
+                <div class="field"><label for="method">Payout method</label><select id="method"><option>Rise</option><option>Crypto</option><option>Bank transfer</option></select></div>
+                <div class="field field-full"><label for="notes">Notes</label><textarea id="notes" placeholder="Wallet / account details"></textarea></div>
+              </div>
+              <div class="form-actions"><button class="btn btn-solid" type="submit">Request payout</button></div>
+              <p class="notice" id="rewardNotice" hidden style="margin-top:1rem">Saved locally for demo.</p>
+            </form>
+          </article>
+          <article class="card">
+            <div class="card-head"><div><h2>How rewards work</h2><p class="card-sub">Typical payout flow.</p></div></div>
+            <div class="quick-list">
+              <div class="quick-item">Pass &amp; get funded <span>1</span></div>
+              <div class="quick-item">Trade within limits <span>2</span></div>
+              <div class="quick-item">Request reward <span>3</span></div>
+              <div class="quick-item">Paid in 24–48h <span>4</span></div>
+            </div>
+          </article>
+        </section>
+        <section class="card">
+          <div class="card-head"><div><h2>Payout history</h2><p class="card-sub">Empty until first reward.</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Date</th><th>Method</th><th>Amount</th><th>Status</th></tr></thead><tbody><tr><td colspan="4"><div class="empty"><strong>No payouts yet</strong><p>Completed requests will list here.</p></div></td></tr></tbody></table></div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../js/portal.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    { "source": "/portal", "destination": "/portal/index.html" },
+    { "source": "/portal/", "destination": "/portal/index.html" },
+    { "source": "/dashboard", "destination": "/portal/index.html" },
+    { "source": "/challenges", "destination": "/portal/challenges.html" },
+    { "source": "/rewards", "destination": "/portal/rewards.html" },
+    { "source": "/platforms", "destination": "/portal/platforms.html" },
+    { "source": "/rules", "destination": "/portal/rules.html" },
+    { "source": "/billing", "destination": "/portal/billing.html" },
+    { "source": "/certificates", "destination": "/portal/certificates.html" },
+    { "source": "/support", "destination": "/portal/support.html" },
+    { "source": "/account", "destination": "/portal/account.html" },
+    { "source": "/settings", "destination": "/portal/settings.html" }
+  ]
+}

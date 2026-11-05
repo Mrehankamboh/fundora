@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — Fundora Portal</title>
+  <link rel="icon" href="../images/logo-fundora.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/portal.css" />
+</head>
+<body data-page="settings">
+  <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+  <div class="portal">
+    <aside class="sidebar" id="sidebar" aria-label="Portal navigation">
+      <a class="sidebar-brand" href="/portal/index.html">
+        <img src="../images/logo-fundora.jpg" alt="" width="40" height="40" />
+        <span>Fundora</span>
+      </a>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-foot">
+        <div class="user-chip">
+          <div class="user-avatar" id="userAvatar">F</div>
+          <div class="user-meta">
+            <strong id="userName">Trader</strong>
+            <span id="userEmail">—</span>
+          </div>
+        </div>
+        <button class="btn-logout" type="button" id="logoutBtn">Logout</button>
+      </div>
+    </aside>
+    <div class="portal-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" type="button" id="sidebarToggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+          <h1>Settings</h1>
+        </div>
+        <span class="status-badge">Preferences</span>
+      </header>
+      <main class="content">
+        <section class="card">
+          <div class="card-head"><div><h2>Notifications</h2><p class="card-sub">Demo toggles — not persisted to a server.</p></div></div>
+          <form id="settingsForm" action="#" method="post">
+            <div class="quick-list" style="margin-bottom:1.25rem">
+              <label class="quick-item" style="cursor:pointer"><span>Email: challenge updates</span><input type="checkbox" checked /></label>
+              <label class="quick-item" style="cursor:pointer"><span>Email: payout status</span><input type="checkbox" checked /></label>
+              <label class="quick-item" style="cursor:pointer"><span>Email: marketing tips</span><input type="checkbox" /></label>
+              <label class="quick-item" style="cursor:pointer"><span>Browser alerts</span><input type="checkbox" /></label>
+            </div>
+            <div class="form-grid">
+              <div class="field"><label for="timezone">Timezone</label><select id="timezone"><option>UTC</option><option>America/New_York</option><option>Europe/London</option><option>Asia/Dubai</option><option>Asia/Karachi</option></select></div>
+              <div class="field"><label for="currency">Display currency</label><select id="currency"><option>USD</option><option>EUR</option><option>GBP</option></select></div>
+            </div>
+            <div class="form-actions"><button class="btn btn-solid" type="submit">Save settings</button></div>
+            <p class="notice" id="settingsNotice" hidden style="margin-top:1rem">Settings saved locally.</p>
+          </form>
+        </section>
+        <section class="card">
+          <div class="card-head"><div><h2>Security</h2><p class="card-sub">Manage password from Account.</p></div></div>
+          <div class="btn-row">
+            <a class="btn btn-ghost" href="/portal/account.html">Go to account</a>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../js/portal.js"></script>
+</body>
+</html>

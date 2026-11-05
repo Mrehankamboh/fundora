@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rules — Fundora Portal</title>
+  <link rel="icon" href="../images/logo-fundora.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/portal.css" />
+</head>
+<body data-page="rules">
+  <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+  <div class="portal">
+    <aside class="sidebar" id="sidebar" aria-label="Portal navigation">
+      <a class="sidebar-brand" href="/portal/index.html">
+        <img src="../images/logo-fundora.jpg" alt="" width="40" height="40" />
+        <span>Fundora</span>
+      </a>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-foot">
+        <div class="user-chip">
+          <div class="user-avatar" id="userAvatar">F</div>
+          <div class="user-meta">
+            <strong id="userName">Trader</strong>
+            <span id="userEmail">—</span>
+          </div>
+        </div>
+        <button class="btn-logout" type="button" id="logoutBtn">Logout</button>
+      </div>
+    </aside>
+    <div class="portal-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" type="button" id="sidebarToggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+          <h1>Rules</h1>
+        </div>
+        <span class="status-badge">Objectives</span>
+      </header>
+      <main class="content">
+        <section class="grid-2">
+          <article class="card">
+            <div class="card-head"><div><h2>Risk limits</h2><p class="card-sub">Apply to all evaluations.</p></div></div>
+            <ul class="rule-list">
+              <li><span>Max daily loss</span><strong>5%</strong></li>
+              <li><span>Max overall loss</span><strong>10%</strong></li>
+              <li><span>Min trading days</span><strong>5</strong></li>
+              <li><span>Weekend holding</span><strong>Allowed</strong></li>
+              <li><span>News trading</span><strong>Allowed*</strong></li>
+              <li><span>EAs / indicators</span><strong>Allowed*</strong></li>
+            </ul>
+            <p class="stat-note">*Within published terms — no latency abuse or reverse copy.</p>
+          </article>
+          <article class="card">
+            <div class="card-head"><div><h2>Profit targets</h2><p class="card-sub">By challenge type.</p></div></div>
+            <ul class="rule-list">
+              <li><span>1-Step target</span><strong>10%</strong></li>
+              <li><span>2-Step phase 1</span><strong>8%</strong></li>
+              <li><span>2-Step phase 2</span><strong>5%</strong></li>
+              <li><span>Reward split</span><strong>80%</strong></li>
+              <li><span>Fee refund</span><strong>First reward</strong></li>
+              <li><span>Scaling</span><strong>Up to $2M</strong></li>
+            </ul>
+            <a class="btn btn-solid" href="/portal/challenges.html">View challenge plans</a>
+          </article>
+        </section>
+        <section class="card">
+          <div class="card-head"><div><h2>Important notes</h2><p class="card-sub">Summary for traders — full legal text later.</p></div></div>
+          <div class="quick-list">
+            <div class="quick-item">Stay within daily &amp; overall loss at all times <span>Required</span></div>
+            <div class="quick-item">Meet minimum trading days before pass <span>Required</span></div>
+            <div class="quick-item">Prohibited: arbitrage, tick exploit, reverse copy <span>Ban risk</span></div>
+            <div class="quick-item">Consistency rules may apply on funded accounts <span>Funded</span></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../js/portal.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+node_modules/
+package-lock.json
+package.json
+_ref-frames/
+_ref-portal.mp4
+_extract-frames.cjs
+_gen-portal-pages.cjs
+_fix-portal-links.cjs
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/

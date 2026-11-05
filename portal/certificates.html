@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificates — Fundora Portal</title>
+  <link rel="icon" href="../images/logo-fundora.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/portal.css" />
+</head>
+<body data-page="certificates">
+  <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+  <div class="portal">
+    <aside class="sidebar" id="sidebar" aria-label="Portal navigation">
+      <a class="sidebar-brand" href="/portal/index.html">
+        <img src="../images/logo-fundora.jpg" alt="" width="40" height="40" />
+        <span>Fundora</span>
+      </a>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-foot">
+        <div class="user-chip">
+          <div class="user-avatar" id="userAvatar">F</div>
+          <div class="user-meta">
+            <strong id="userName">Trader</strong>
+            <span id="userEmail">—</span>
+          </div>
+        </div>
+        <button class="btn-logout" type="button" id="logoutBtn">Logout</button>
+      </div>
+    </aside>
+    <div class="portal-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" type="button" id="sidebarToggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+          <h1>Certificates</h1>
+        </div>
+        <span class="status-badge">Achievements</span>
+      </header>
+      <main class="content">
+        <section class="grid-2">
+          <article class="card">
+            <div class="card-head"><div><h2>Challenge certificate</h2><p class="card-sub">Issued when you pass an evaluation.</p></div></div>
+            <div class="empty"><strong>Not earned yet</strong><p>Pass 1-Step or 2-Step to unlock this certificate.</p></div>
+            <a class="btn btn-solid btn-block" href="/portal/challenges.html">Start challenge</a>
+          </article>
+          <article class="card">
+            <div class="card-head"><div><h2>Funded certificate</h2><p class="card-sub">Issued with your funded account.</p></div></div>
+            <div class="empty"><strong>Not funded yet</strong><p>Complete verification / funded onboarding first.</p></div>
+            <a class="btn btn-ghost btn-block" href="/portal/rules.html">Read rules</a>
+          </article>
+        </section>
+        <section class="card">
+          <div class="card-head"><div><h2>Certificate history</h2><p class="card-sub">Downloadable PDFs later via backend.</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Account</th><th>Action</th></tr></thead>
+          <tbody><tr><td colspan="4"><div class="empty"><strong>No certificates</strong><p>Your awards will appear here.</p></div></td></tr></tbody></table></div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../js/portal.js"></script>
+</body>
+</html>

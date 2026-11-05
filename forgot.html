@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forgot password — Fundora</title>
+  <link rel="icon" href="images/logo-fundora.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="css/support-widget.css?v=5" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="brand">
+      <a class="logo" href="index.html"><img class="mark" src="images/logo-fundora.jpg" alt="" width="36" height="36" />Fundora</a>
+      <div class="brand-stage">
+        <h1 class="brand-headline">Reset access<br />in one<br />secure step.</h1>
+        <div class="brand-globe fundora-globe" data-size="320" data-min="240">
+          <div class="globe-halo" aria-hidden="true"></div>
+          <canvas aria-label="Interactive world globe. Drag to rotate."></canvas>
+          <p class="globe-hint">Drag to explore</p>
+        </div>
+      </div>
+    </aside>
+    <main class="panel">
+      <div class="glass">
+        <h2>Forgot password</h2>
+        <p class="sub">Enter your email and we’ll send a reset link.</p>
+        <form action="#" method="post" onsubmit="return false">
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="you@email.com" autocomplete="email" required />
+          </div>
+          <button class="btn" type="submit">Send reset link</button>
+        </form>
+        <p class="switch"><a href="login.html">Back to sign in</a> · <a href="support.html">Need help?</a></p>
+      </div>
+    </main>
+  </div>
+  <script src="js/globe.js"></script>
+  <script src="js/support-widget.js?v=4"></script>
+</body>
+</html>

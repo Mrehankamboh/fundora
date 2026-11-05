@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Fundora Portal</title>
+  <link rel="icon" href="../images/logo-fundora.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/portal.css" />
+</head>
+<body data-page="dashboard">
+  <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+  <div class="portal">
+    <aside class="sidebar" id="sidebar" aria-label="Portal navigation">
+      <a class="sidebar-brand" href="/portal/index.html">
+        <img src="../images/logo-fundora.jpg" alt="" width="40" height="40" />
+        <span>Fundora</span>
+      </a>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-foot">
+        <div class="user-chip">
+          <div class="user-avatar" id="userAvatar">F</div>
+          <div class="user-meta">
+            <strong id="userName">Trader</strong>
+            <span id="userEmail">—</span>
+          </div>
+        </div>
+        <button class="btn-logout" type="button" id="logoutBtn">Logout</button>
+      </div>
+    </aside>
+    <div class="portal-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" type="button" id="sidebarToggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+          <h1>Dashboard</h1>
+        </div>
+        <span class="status-badge">No active challenge</span>
+      </header>
+      <main class="content">
+        <section class="card welcome">
+          <h2>Welcome back, <span id="welcomeName">Trader</span></h2>
+          <p>Track evaluations, platforms, rewards, and account details from one portal.</p>
+          <div class="btn-row">
+            <a class="btn btn-solid" href="/portal/challenges.html">Browse challenges</a>
+            <a class="btn btn-ghost" href="/portal/platforms.html">Platforms</a>
+          </div>
+        </section>
+        <section class="grid-4">
+          <article class="stat"><p class="stat-label">Account status</p><p class="stat-value">Ready</p><p class="stat-note">Profile complete</p></article>
+          <article class="stat"><p class="stat-label">Active challenge</p><p class="stat-value">—</p><p class="stat-note">None selected</p></article>
+          <article class="stat"><p class="stat-label">Balance</p><p class="stat-value">$0</p><p class="stat-note">Demo snapshot</p></article>
+          <article class="stat"><p class="stat-label">Rewards paid</p><p class="stat-value">$0</p><p class="stat-note">No payouts yet</p></article>
+        </section>
+        <section class="grid-2">
+          <article class="card">
+            <div class="card-head"><div><h2>Quick actions</h2><p class="card-sub">Jump across the portal.</p></div></div>
+            <div class="quick-list">
+              <a href="/portal/challenges.html">Challenges <span>Plans</span></a>
+              <a href="/portal/rewards.html">Rewards <span>Payouts</span></a>
+              <a href="/portal/platforms.html">Platforms <span>MT5 / cTrader</span></a>
+              <a href="/portal/rules.html">Trading rules <span>Objectives</span></a>
+              <a href="/portal/billing.html">Billing <span>Invoices</span></a>
+              <a href="/portal/certificates.html">Certificates <span>Status</span></a>
+              <a href="/portal/support.html">Support <span>Help</span></a>
+              <a href="/portal/account.html">Account <span>Profile</span></a>
+              <a href="/portal/settings.html">Settings <span>Prefs</span></a>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-head"><div><h2>Next step</h2><p class="card-sub">Choose an evaluation to begin.</p></div></div>
+            <div class="empty"><strong>No challenge yet</strong><p>Pick 1-Step or 2-Step and an account size.</p></div>
+            <a class="btn btn-solid btn-block" href="/portal/challenges.html">Choose challenge</a>
+          </article>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="../js/portal.js"></script>
+</body>
+</html>

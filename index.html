@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fundora — Trade with Institutional Discipline</title>
+  <meta name="description" content="Fundora offers classical prop trading challenges. Choose 1-Step or 2-Step evaluations, select your account size, and get funded." />
+  <link rel="icon" href="images/logo-fundora.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/support-widget.css?v=8" />
+</head>
+<body>
+  <div class="load-curtain" id="loadCurtain" aria-hidden="true">
+    <div class="curtain-inner">
+      <img class="curtain-logo" src="images/logo-fundora.jpg" alt="Fundora" width="96" height="96" />
+      <span class="curtain-rule"></span>
+    </div>
+  </div>
+
+  <header class="site-header" id="top">
+    <nav class="navbar" aria-label="Primary">
+      <a class="brand" href="#top">
+        <img class="brand-mark" src="images/logo-fundora.jpg" alt="" width="40" height="40" />
+        <span class="brand-text">Fundora</span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navDrawer" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="nav-drawer" id="navDrawer">
+        <ul class="nav-links">
+          <li><a href="#challenges">Challenges</a></li>
+          <li><a href="#features">Why Fundora</a></li>
+          <li><a href="#rewards">Rewards</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="support.html">Support</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a class="btn btn-ghost" href="login.html">Login</a>
+          <a class="btn btn-solid" href="register.html">Start Challenge</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-brand">
+      <div class="hero-atmosphere" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="hero-eyebrow reveal">Prop evaluation · Funded capital</p>
+          <p class="hero-brand reveal" id="hero-brand">Fundora</p>
+          <h1 class="hero-title reveal">Trade with institutional discipline.</h1>
+          <p class="hero-sub reveal">A classical evaluation for serious traders. Clear rules. Measured risk. Capital when you earn it.</p>
+          <ul class="hero-perks reveal" aria-label="Program highlights">
+            <li>Fee refunded with first reward</li>
+            <li>No artificial time limit</li>
+            <li>MT5 &amp; cTrader</li>
+          </ul>
+          <div class="hero-ctas reveal">
+            <a class="btn btn-solid btn-lg" href="#challenges">Start Challenge</a>
+            <a class="btn btn-ghost btn-lg" href="#features">Why Fundora</a>
+          </div>
+          <dl class="hero-meta reveal" aria-label="Fundora highlights">
+            <div>
+              <dt>Capital up to</dt>
+              <dd>$200K</dd>
+            </div>
+            <div>
+              <dt>Reward split</dt>
+              <dd>80%</dd>
+            </div>
+            <div>
+              <dt>Evaluation</dt>
+              <dd>1-Step · 2-Step</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="hero-visual reveal">
+          <div class="hero-globe fundora-globe" id="heroGlobe" data-size="620" data-min="300">
+            <div class="globe-halo" aria-hidden="true"></div>
+            <canvas id="globeCanvas" aria-label="Interactive world globe. Drag to rotate."></canvas>
+            <p class="globe-hint">Drag to explore</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof" aria-label="Company highlights">
+      <div class="section-inner proof-inner">
+        <div class="proof-item fade-up">
+          <strong>$48M+</strong>
+          <span>Rewards paid</span>
+        </div>
+        <div class="proof-item fade-up">
+          <strong>120K+</strong>
+          <span>Active evaluations</span>
+        </div>
+        <div class="proof-item fade-up">
+          <strong>4.9</strong>
+          <span>Trader rating</span>
+        </div>
+        <div class="proof-item fade-up">
+          <strong>140+</strong>
+          <span>Countries</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Trusted by traders worldwide">
+      <div class="section-inner trust-inner">
+        <p class="trust-label">Trusted across</p>
+        <div class="trust-logos" aria-hidden="true">
+          <span>Northbridge</span>
+          <span>Apex Desk</span>
+          <span>Ledger Pro</span>
+          <span>Signal Hall</span>
+          <span>Forge FX</span>
+          <span>Prime Route</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features" aria-labelledby="features-title">
+      <div class="section-inner features-layout">
+        <header class="features-intro fade-left">
+          <p class="eyebrow">Why Fundora</p>
+          <h2 id="features-title">Built for traders who want clarity</h2>
+          <p class="section-sub">No cluttered promises — rules you can read, capital you can scale, and payouts you can track.</p>
+        </header>
+        <ol class="feature-list">
+          <li class="fade-right">
+            <span class="fl-num">01</span>
+            <div>
+              <h3>Transparent objectives</h3>
+              <p>Profit targets, drawdowns, and trading days published before you buy.</p>
+            </div>
+          </li>
+          <li class="fade-right">
+            <span class="fl-num">02</span>
+            <div>
+              <h3>Up to 80% reward split</h3>
+              <p>Keep the majority of profits on funded accounts, with scheduled cycles and fee refunds.</p>
+            </div>
+          </li>
+          <li class="fade-right">
+            <span class="fl-num">03</span>
+            <div>
+              <h3>Measured risk limits</h3>
+              <p>Daily and overall loss caps that protect capital while leaving room for a real edge.</p>
+            </div>
+          </li>
+          <li class="fade-right">
+            <span class="fl-num">04</span>
+            <div>
+              <h3>No artificial time crush</h3>
+              <p>Meet minimum trading days — not a countdown. Trade when your edge is present.</p>
+            </div>
+          </li>
+          <li class="fade-right">
+            <span class="fl-num">05</span>
+            <div>
+              <h3>Institutional platforms</h3>
+              <p>MetaTrader 5 and cTrader with institutional-grade data and execution.</p>
+            </div>
+          </li>
+          <li class="fade-right">
+            <span class="fl-num">06</span>
+            <div>
+              <h3>Clear scaling pathway</h3>
+              <p>Grow from evaluation to larger funded allocations as you stay consistent.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="challenges" id="challenges" aria-labelledby="challenges-title">
+      <div class="challenges-glow" aria-hidden="true"></div>
+      <div class="section-inner challenges-inner">
+        <header class="challenges-head fade-up">
+          <p class="eyebrow">Challenges</p>
+          <h2 id="challenges-title">Build your funded path</h2>
+          <p class="section-sub">Pick a challenge type and account size. Rules and pricing update live — start when you are ready.</p>
+        </header>
+
+        <div class="challenge-board scale-in" id="planner">
+          <div class="challenge-board-main">
+            <div class="picker">
+              <div class="picker-label">
+                <span class="step-num">01</span>
+                <span class="step-txt">Challenge type</span>
+              </div>
+              <div class="type-cards" role="tablist" aria-label="Challenge type">
+                <button type="button" class="seg-btn type-card is-active" role="tab" aria-selected="true" data-type="1-step">
+                  <span class="type-card-top">
+                    <span class="type-card-name">1-Step</span>
+                    <span class="type-card-badge">Faster</span>
+                  </span>
+                  <span class="type-card-desc">Single evaluation. Hit the target once and move to funded.</span>
+                  <span class="type-card-meta">Best for confident traders</span>
+                </button>
+                <button type="button" class="seg-btn type-card" role="tab" aria-selected="false" data-type="2-step">
+                  <span class="type-card-top">
+                    <span class="type-card-name">2-Step</span>
+                    <span class="type-card-badge">Classic</span>
+                  </span>
+                  <span class="type-card-desc">Phase 1 + Phase 2. Lower pressure path with staged targets.</span>
+                  <span class="type-card-meta">Best for structured progress</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="picker">
+              <div class="picker-label">
+                <span class="step-num">02</span>
+                <span class="step-txt">Account size</span>
+              </div>
+              <div class="size-chips" role="group" aria-label="Account size">
+                <button type="button" class="chip" data-size="5000"><span class="chip-label">Starter</span><span class="chip-value">$5K</span></button>
+                <button type="button" class="chip" data-size="10000"><span class="chip-label">Core</span><span class="chip-value">$10K</span></button>
+                <button type="button" class="chip is-active" data-size="25000"><span class="chip-label">Popular</span><span class="chip-value">$25K</span></button>
+                <button type="button" class="chip" data-size="50000"><span class="chip-label">Pro</span><span class="chip-value">$50K</span></button>
+                <button type="button" class="chip" data-size="100000"><span class="chip-label">Elite</span><span class="chip-value">$100K</span></button>
+                <button type="button" class="chip" data-size="200000"><span class="chip-label">Master</span><span class="chip-value">$200K</span></button>
+              </div>
+            </div>
+
+            <div class="challenge-metrics" aria-hidden="true">
+              <div class="metric">
+                <span class="metric-label">Profit target</span>
+                <strong class="metric-value" id="metricTarget">10%</strong>
+              </div>
+              <div class="metric">
+                <span class="metric-label">Daily loss</span>
+                <strong class="metric-value" id="metricDaily">5%</strong>
+              </div>
+              <div class="metric">
+                <span class="metric-label">Overall loss</span>
+                <strong class="metric-value" id="metricOverall">10%</strong>
+              </div>
+              <div class="metric">
+                <span class="metric-label">Min days</span>
+                <strong class="metric-value" id="metricDays">5</strong>
+              </div>
+            </div>
+
+            <ul class="planner-perks">
+              <li>Fee refunded with first reward</li>
+              <li>Hold over weekends allowed</li>
+              <li>Scale up to $2M allocation</li>
+              <li>Trade forex, indices &amp; metals</li>
+            </ul>
+          </div>
+
+          <aside class="plan-summary" id="planSummary" aria-live="polite">
+            <p class="summary-kicker">Your selection</p>
+            <div class="summary-head">
+              <p class="summary-type" id="summaryType">1-Step · $25,000</p>
+              <p class="summary-price"><span class="currency">$</span><span id="summaryPrice">249</span></p>
+              <p class="summary-once">One-time evaluation fee</p>
+            </div>
+            <ul class="summary-rules">
+              <li><span>Profit target</span><strong id="ruleTarget">10%</strong></li>
+              <li><span>Max daily loss</span><strong id="ruleDaily">5%</strong></li>
+              <li><span>Max overall loss</span><strong id="ruleOverall">10%</strong></li>
+              <li><span>Min trading days</span><strong id="ruleDays">5</strong></li>
+              <li><span>Reward split</span><strong id="ruleSplit">80%</strong></li>
+            </ul>
+            <a class="btn btn-solid btn-block btn-lg" href="register.html" id="buyChallenge">Buy Challenge</a>
+            <p class="summary-note">Refundable on first reward payout. Instant account credentials after purchase.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="how" id="how" aria-labelledby="how-title">
+      <div class="section-inner">
+        <header class="section-head how-head">
+          <p class="eyebrow">Process</p>
+          <h2 id="how-title">How it works</h2>
+        </header>
+        <ol class="how-steps">
+          <li class="fade-up">
+            <span class="how-num">01</span>
+            <h3>Pass the challenge</h3>
+            <p>Prove consistency under clear risk limits. No time pressure beyond minimum trading days.</p>
+          </li>
+          <li class="fade-up">
+            <span class="how-num">02</span>
+            <h3>Get funded</h3>
+            <p>Receive a Fundora funded account sized to the plan you passed. Same discipline, real capital.</p>
+          </li>
+          <li class="fade-up">
+            <span class="how-num">03</span>
+            <h3>Earn rewards</h3>
+            <p>Keep up to 80% of profits. Withdraw on a scheduled cycle with transparent reporting.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="rewards" id="rewards" aria-labelledby="rewards-title">
+      <div class="section-inner rewards-grid">
+        <div class="rewards-copy fade-left">
+          <p class="eyebrow">Rewards</p>
+          <h2 id="rewards-title">Get paid for disciplined performance</h2>
+          <p class="section-sub">Request rewards on a flexible cycle. Track every payout in your Fundora portal with clear status and history.</p>
+          <ul class="check-list">
+            <li>Bi-weekly or on-demand reward windows</li>
+            <li>Bank, Rise, and crypto payout options</li>
+            <li>Evaluation fee returned with first reward</li>
+            <li>Zero denial when rules are met</li>
+          </ul>
+          <a class="btn btn-solid" href="#challenges">View challenge plans</a>
+        </div>
+        <div class="rewards-ledger fade-right" aria-hidden="true">
+          <p class="ledger-label">Recent rewards</p>
+          <div class="ledger-row"><span>Master · Rise</span><span>Mar 12</span><span class="ok">Paid</span></div>
+          <div class="ledger-row"><span>Master · Crypto</span><span>Apr 02</span><span class="ok">Paid</span></div>
+          <div class="ledger-row"><span>Master · Bank</span><span>Apr 28</span><span class="ok">Paid</span></div>
+          <div class="ledger-row"><span>Master · Rise</span><span>May 18</span><span class="pending">Pending</span></div>
+          <p class="ledger-note">Typical processing within 24–48 hours.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="platforms" id="platforms" aria-labelledby="platforms-title">
+      <div class="section-inner">
+        <header class="section-head platforms-head">
+          <p class="eyebrow">Platforms</p>
+          <h2 id="platforms-title">Trade where professionals trade</h2>
+          <p class="section-sub">Same Fundora objectives across MetaTrader 5, cTrader, and the Fundora Portal.</p>
+        </header>
+        <div class="platform-list">
+          <article class="platform fade-up">
+            <div class="platform-media">
+              <img src="images/trading-chart.jpg" alt="Trading chart on MetaTrader 5" loading="lazy" width="800" height="450" />
+            </div>
+            <h3>MetaTrader 5</h3>
+            <p>Industry-standard charts, EAs, and indicators with Fundora server profiles ready at signup.</p>
+          </article>
+          <article class="platform fade-up">
+            <div class="platform-media">
+              <img src="images/trading-desk.jpg" alt="Multi-monitor trading desk for cTrader" loading="lazy" width="800" height="450" />
+            </div>
+            <h3>cTrader</h3>
+            <p>Depth-of-market tools and copy trading for traders who prefer a modern workspace.</p>
+          </article>
+          <article class="platform fade-up">
+            <div class="platform-media">
+              <img src="images/trading-floor.jpg" alt="Trading floor view for Fundora Portal" loading="lazy" width="800" height="450" />
+            </div>
+            <h3>Fundora Portal</h3>
+            <p>Track objectives, drawdown, and rewards in one place — desktop or mobile.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="stories" id="stories" aria-labelledby="stories-title">
+      <div class="section-inner">
+        <header class="section-head stories-head">
+          <p class="eyebrow">Traders</p>
+          <h2 id="stories-title">What funded traders say</h2>
+        </header>
+        <div class="story-list">
+          <blockquote class="story fade-up">
+            <p>Rules were plain English. I passed the 2-Step on a $50K and had my first reward in under two weeks.</p>
+            <footer>
+              <strong>Amira K.</strong>
+              <span>FX swing · Dubai</span>
+            </footer>
+          </blockquote>
+          <blockquote class="story fade-up">
+            <p>No fake urgency. I waited for my setups, hit the target, and scaled. Fundora feels institutional.</p>
+            <footer>
+              <strong>James R.</strong>
+              <span>Indices · London</span>
+            </footer>
+          </blockquote>
+          <blockquote class="story fade-up">
+            <p>Payout tracking in the portal is excellent. I always know where my reward request stands.</p>
+            <footer>
+              <strong>Sofia M.</strong>
+              <span>Gold · Madrid</span>
+            </footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq" id="faq" aria-labelledby="faq-title">
+      <div class="faq-glow" aria-hidden="true"></div>
+      <div class="section-inner faq-inner">
+        <header class="faq-intro fade-up">
+          <div class="faq-intro-copy">
+            <p class="eyebrow">FAQ</p>
+            <h2 id="faq-title">Answers before you start</h2>
+            <p class="section-sub">Clear rules on challenges, rewards, platforms, and scaling — so you can trade with confidence.</p>
+          </div>
+          <div class="faq-intro-aside fade-up">
+            <p class="faq-aside-label">Still unsure?</p>
+            <p class="faq-aside-text">Our team helps with challenge selection, payouts, and account setup.</p>
+            <a class="btn btn-ghost" href="#support">Talk to support</a>
+          </div>
+        </header>
+
+        <div class="faq-panel scale-in">
+          <div class="faq-list">
+            <details class="faq-item fade-up" open>
+              <summary>
+                <span class="faq-num">01</span>
+                <span class="faq-q">What is the difference between 1-Step and 2-Step?</span>
+              </summary>
+              <div class="faq-a">
+                <p>1-Step is a single evaluation phase with a higher profit target. 2-Step splits the journey into two phases with a lower initial target and an additional verification stage.</p>
+              </div>
+            </details>
+            <details class="faq-item fade-up">
+              <summary>
+                <span class="faq-num">02</span>
+                <span class="faq-q">Are there overnight or news trading restrictions?</span>
+              </summary>
+              <div class="faq-a">
+                <p>Overnight positions are permitted. Extreme news windows may carry elevated risk — trade within the published daily loss limit at all times.</p>
+              </div>
+            </details>
+            <details class="faq-item fade-up">
+              <summary>
+                <span class="faq-num">03</span>
+                <span class="faq-q">When do I receive my first reward?</span>
+              </summary>
+              <div class="faq-a">
+                <p>After your first successful payout cycle on a funded account, the evaluation fee is refunded with your reward per program terms.</p>
+              </div>
+            </details>
+            <details class="faq-item fade-up">
+              <summary>
+                <span class="faq-num">04</span>
+                <span class="faq-q">Can I trade EAs and indicators?</span>
+              </summary>
+              <div class="faq-a">
+                <p>Yes on MetaTrader 5, provided they do not exploit latency, arbitrage, or reverse-copy prohibited strategies outlined in the terms.</p>
+              </div>
+            </details>
+            <details class="faq-item fade-up">
+              <summary>
+                <span class="faq-num">05</span>
+                <span class="faq-q">How does account scaling work?</span>
+              </summary>
+              <div class="faq-a">
+                <p>Consistent profitable cycles unlock larger allocations, up to the published maximum for your program tier.</p>
+              </div>
+            </details>
+            <details class="faq-item fade-up">
+              <summary>
+                <span class="faq-num">06</span>
+                <span class="faq-q">Which platforms can I use with Fundora?</span>
+              </summary>
+              <div class="faq-a">
+                <p>Trade on MetaTrader 5, cTrader, or manage progress in the Fundora Portal. Objectives stay the same across every platform.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta" aria-labelledby="cta-title">
+      <div class="section-inner final-cta-inner fade-up">
+        <p class="eyebrow">Begin</p>
+        <h2 id="cta-title">Ready to trade with Fundora?</h2>
+        <p>Pick a challenge, prove your edge, and earn on funded capital.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-solid btn-lg" href="#challenges">Start Challenge</a>
+          <a class="btn btn-ghost btn-lg" href="#faq">Read FAQ</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="brand" href="#top">
+          <img class="brand-mark" src="images/logo-fundora.jpg" alt="" width="40" height="40" />
+          <span class="brand-text">Fundora</span>
+        </a>
+        <p>Institutional-grade evaluation for traders who value clarity, capital, and composure.</p>
+      </div>
+      <div class="footer-cols">
+        <div>
+          <h4>Challenges</h4>
+          <a href="#challenges">1-Step</a>
+          <a href="#challenges">2-Step</a>
+          <a href="#challenges">Pricing</a>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <a href="#features">Why Fundora</a>
+          <a href="#how">How it works</a>
+          <a href="#stories">Traders</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
+          <a href="#">Risk disclosure</a>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <a href="#">X / Twitter</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">Discord</a>
+          <a href="support.html">Support chat</a>
+          <a href="mailto:support@fundora.com">support@fundora.com</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> Fundora. All rights reserved.</p>
+      <p class="disclaimer">Trading involves risk. Past performance is not indicative of future results.</p>
+    </div>
+  </footer>
+
+  <script src="js/globe.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/support-widget.js?v=5"></script>
+</body>
+</html>
