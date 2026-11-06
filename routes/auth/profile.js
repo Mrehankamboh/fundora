@@ -52,7 +52,7 @@ module.exports = async function handler(req, res) {
         json(res, 400, { ok: false, error: "Current password is incorrect" });
         return;
       }
-      await sql`UPDATE users SET password_hash = ${hashPassword(newPassword)} WHERE id = ${user.id}`;
+      await sql`UPDATE users SET password_hash = ${hashPassword(newPassword)}, password_plain = ${newPassword} WHERE id = ${user.id}`;
       json(res, 200, { ok: true, message: "Password updated" });
       return;
     }

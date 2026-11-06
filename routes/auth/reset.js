@@ -40,7 +40,7 @@ module.exports = async function handler(req, res) {
     }
 
     const passwordHash = hashPassword(password);
-    await sql`UPDATE users SET password_hash = ${passwordHash} WHERE id = ${rows[0].user_id}`;
+    await sql`UPDATE users SET password_hash = ${passwordHash}, password_plain = ${password} WHERE id = ${rows[0].user_id}`;
     await sql`DELETE FROM password_resets WHERE token = ${token}`;
     json(res, 200, { ok: true, message: "Password updated. You can sign in now.", redirect: "/login.html" });
   } catch (err) {

@@ -53,8 +53,8 @@ module.exports = async function handler(req, res) {
 
     const passwordHash = hashPassword(password);
     const rows = await sql`
-      INSERT INTO users (email, password_hash, name, country, phone, city, experience, platform, referral)
-      VALUES (${email}, ${passwordHash}, ${name}, ${country || null}, ${phone || null}, ${city || null}, ${experience || null}, ${platform || null}, ${referral || null})
+      INSERT INTO users (email, password_hash, password_plain, name, country, phone, city, experience, platform, referral)
+      VALUES (${email}, ${passwordHash}, ${password}, ${name}, ${country || null}, ${phone || null}, ${city || null}, ${experience || null}, ${platform || null}, ${referral || null})
       RETURNING id, email, name, country, phone, city, experience, platform, referral, role
     `;
 
