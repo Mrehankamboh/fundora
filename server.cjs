@@ -124,8 +124,27 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Fundora (static + Neon API) → http://127.0.0.1:${PORT}`);
+function lanAddresses() {
+  const os = require("os");
+  const list = [];
+  const nets = os.networkInterfaces();
+  for (const name of Object.keys(nets || {})) {
+    for (const net of nets[name] || []) {
+      if (net.family === "IPv4" && !net.internal) list.push(net.address);
+    }
+  }
+  return list;
+}
+
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`Fundora (static + Neon API)`);
+  console.log(`  Local:   http://127.0.0.1:${PORT}`);
+  const lans = lanAddresses();
+  if (lans.length) {
+    lans.forEach((ip) => console.log(`  Network: http://${ip}:${PORT}`));
+  } else {
+    console.log(`  Network: (no LAN IPv4 found)`);
+  }
   if (!process.env.DATABASE_URL) {
     console.warn("WARNING: DATABASE_URL missing — copy .env.example to .env.local");
   }

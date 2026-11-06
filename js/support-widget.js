@@ -1,4 +1,4 @@
-/* Fundora floating support widget — FO / Intercom layout on full site pages */
+/* Fundora floating support widget — live Neon tickets ↔ admin Call desk */
 (function () {
   if (document.querySelector(".fw-root")) return;
 
@@ -14,7 +14,7 @@
   root.innerHTML = `
     <div class="fw-panel" id="fwPanel" role="dialog" aria-label="Fundora support" aria-hidden="true">
       <header class="fw-head">
-        <a class="fw-brand" href="index.html"><span class="fw-mark" aria-hidden="true"></span>Fundora</a>
+        <a class="fw-brand" href="/index.html"><img class="fw-mark" src="/images/logo-fundora.jpg" alt="" width="22" height="22" />Fundora</a>
         <button class="fw-close" type="button" id="fwClose" aria-label="Close chat">
           <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
@@ -33,12 +33,7 @@
           </button>
         </section>
         <section class="fw-view fw-messages" data-view="messages">
-          <ul class="fw-thread" id="fwThread" aria-live="polite">
-            <li class="fw-bubble fw-agent">
-              <p>Hi — welcome to Fundora support. Ask about challenges, rewards, or your account.</p>
-              <time>Now</time>
-            </li>
-          </ul>
+          <ul class="fw-thread" id="fwThread" aria-live="polite"></ul>
           <form class="fw-form" id="fwForm">
             <label class="sr-only" for="fwInput">Message</label>
             <input id="fwInput" type="text" placeholder="Write a reply…" autocomplete="off" required />
@@ -84,6 +79,25 @@
   const form = root.querySelector("#fwForm");
   const input = root.querySelector("#fwInput");
 
+  const STORAGE_KEY = "fundora_support_ticket";
+  const GREETING =
+    "Hi — welcome to Fundora support. Ask about challenges, rewards, or your account.";
+  let ticketId = "";
+  let visitorKey = "";
+  let knownIds = new Set();
+  let pollTimer = null;
+  let sending = false;
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    if (saved && saved.ticketId) {
+      ticketId = String(saved.ticketId);
+      visitorKey = String(saved.visitorKey || "");
+    }
+  } catch (_) {
+    /* ignore */
+  }
+
   const setOpen = (open) => {
     panel.classList.toggle("is-open", open);
     launcher.classList.toggle("is-open", open);
@@ -91,17 +105,23 @@
     launcher.setAttribute("aria-expanded", open ? "true" : "false");
     launcher.setAttribute("aria-label", "Open support chat");
     launcher.hidden = !!open;
+    if (open) syncMessages(true);
   };
 
   const setView = (name) => {
-    views.forEach((view) => view.classList.toggle("is-active", view.dataset.view === name));
+    views.forEach((view) =>
+      view.classList.toggle("is-active", view.dataset.view === name)
+    );
     tabs.forEach((tab) => {
       const on = tab.dataset.tab === name;
       tab.classList.toggle("is-active", on);
       if (on) tab.setAttribute("aria-current", "page");
       else tab.removeAttribute("aria-current");
     });
-    if (name === "messages") window.setTimeout(() => input.focus(), 120);
+    if (name === "messages") {
+      window.setTimeout(() => input.focus(), 120);
+      syncMessages(true);
+    }
   };
 
   window.FundoraSupport = {
@@ -116,52 +136,60 @@
     },
   };
 
-  launcher.addEventListener("click", () => setOpen(!panel.classList.contains("is-open")));
+  launcher.addEventListener("click", () =>
+    setOpen(!panel.classList.contains("is-open"))
+  );
   closeBtn.addEventListener("click", () => setOpen(false));
   startChat.addEventListener("click", () => setView("messages"));
-  tabs.forEach((tab) => tab.addEventListener("click", () => setView(tab.dataset.tab)));
+  tabs.forEach((tab) =>
+    tab.addEventListener("click", () => setView(tab.dataset.tab))
+  );
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && panel.classList.contains("is-open")) setOpen(false);
   });
 
-  document.querySelectorAll('[href="support.html"], [data-open-support]').forEach((link) => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      setOpen(true);
-      setView("home");
+  document
+    .querySelectorAll('[href="support.html"], [data-open-support]')
+    .forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        setOpen(true);
+        setView("home");
+      });
     });
-  });
-
-  const STORAGE_KEY = "fundora_support_ticket";
-  let ticketId = "";
-  let visitorKey = "";
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-    if (saved && saved.ticketId) {
-      ticketId = String(saved.ticketId);
-      visitorKey = String(saved.visitorKey || "");
-    }
-  } catch (_) {
-    /* ignore */
-  }
 
   const escapeHtml = (value) =>
-    value
+    String(value || "")
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
 
-  const addBubble = (text, who) => {
+  const stamp = (value) => {
+    const date = value ? new Date(value) : new Date();
+    if (Number.isNaN(date.getTime())) return "";
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
+  const addBubble = (text, who, meta) => {
+    const id = meta && meta.id ? String(meta.id) : "";
+    if (id && knownIds.has(id)) return;
+    if (id) knownIds.add(id);
     const li = document.createElement("li");
     li.className = `fw-bubble fw-${who}`;
-    li.innerHTML = `<p>${escapeHtml(text)}</p><time>${new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    })}</time>`;
+    if (id) li.dataset.msgId = id;
+    li.innerHTML = `<p>${escapeHtml(text)}</p><time>${stamp(
+      meta && meta.createdAt
+    )}</time>`;
     thread.appendChild(li);
     thread.scrollTop = thread.scrollHeight;
+  };
+
+  const showGreeting = () => {
+    thread.innerHTML = "";
+    knownIds = new Set();
+    addBubble(GREETING, "agent");
   };
 
   const persistTicket = () => {
@@ -175,33 +203,68 @@
     }
   };
 
-  const loadHistory = async () => {
-    if (!ticketId) return;
+  const renderMessages = (messages) => {
+    const list = Array.isArray(messages) ? messages : [];
+    if (!list.length) {
+      if (!thread.children.length) showGreeting();
+      return;
+    }
+    const nextIds = new Set(list.map((m) => String(m.id)));
+    const changed =
+      nextIds.size !== knownIds.size ||
+      [...nextIds].some((id) => !knownIds.has(id));
+    if (!changed && thread.children.length) return;
+
+    thread.innerHTML = "";
+    knownIds = new Set();
+    list.forEach((m) => {
+      addBubble(m.body, m.author === "admin" ? "agent" : "user", {
+        id: m.id,
+        createdAt: m.createdAt,
+      });
+    });
+  };
+
+  const syncMessages = async (force) => {
+    if (!ticketId) {
+      if (force || !thread.children.length) showGreeting();
+      return;
+    }
     try {
       const q = new URLSearchParams({ id: ticketId });
       if (visitorKey) q.set("visitorKey", visitorKey);
-      const res = await fetch(`/api/tickets?${q}`, { credentials: "same-origin" });
-      const data = await res.json();
-      if (!res.ok || !data.ok) return;
-      thread.innerHTML = "";
-      (data.messages || []).forEach((m) => {
-        addBubble(m.body, m.author === "admin" ? "agent" : "user");
+      const res = await fetch(`/api/tickets?${q}`, {
+        credentials: "same-origin",
       });
-      if (!(data.messages || []).length) {
-        addBubble(
-          "Hi — welcome to Fundora support. Ask about challenges, rewards, or your account.",
-          "agent"
-        );
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        if (force) showGreeting();
+        return;
       }
+      renderMessages(data.messages || []);
     } catch (_) {
-      /* keep default greeting */
+      if (force && !thread.children.length) showGreeting();
     }
+  };
+
+  const startPolling = () => {
+    if (pollTimer) return;
+    pollTimer = window.setInterval(() => {
+      if (!ticketId) return;
+      if (
+        document.hidden &&
+        !panel.classList.contains("is-open")
+      )
+        return;
+      syncMessages(false);
+    }, 4000);
   };
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const text = input.value.trim();
-    if (!text) return;
+    if (!text || sending) return;
+    sending = true;
     addBubble(text, "user");
     input.value = "";
     try {
@@ -224,16 +287,20 @@
       ticketId = String(data.ticketId || ticketId);
       if (data.visitorKey) visitorKey = String(data.visitorKey);
       persistTicket();
-      addBubble(
-        "Thanks — a Fundora specialist will reply in Call. You can keep chatting here.",
-        "agent"
-      );
+      startPolling();
+      await syncMessages(true);
     } catch (_) {
       addBubble("Network error — please try again.", "agent");
+    } finally {
+      sending = false;
     }
   });
 
-  loadHistory();
+  showGreeting();
+  if (ticketId) {
+    syncMessages(true);
+    startPolling();
+  }
 
   const bootOpen = () => {
     if (!wantOpen()) return;

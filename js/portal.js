@@ -84,6 +84,27 @@
     }
     const brand = document.querySelector(".sidebar-brand");
     if (brand) brand.setAttribute("href", "/portal/index.html");
+
+    const topbar = document.querySelector(".topbar");
+    if (topbar && !topbar.querySelector(".topbar-support")) {
+      const actions = document.createElement("div");
+      actions.className = "topbar-actions";
+      const supportBtn = document.createElement("button");
+      supportBtn.type = "button";
+      supportBtn.className = "topbar-support";
+      supportBtn.setAttribute("data-open-support", "");
+      supportBtn.innerHTML =
+        '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 10a4 4 0 0 1 8 0v2a4 4 0 0 1-8 0v-2z"/><path d="M4 12v1a8 8 0 0 0 16 0v-1M12 21v-2"/></svg><span>Support</span>';
+      supportBtn.addEventListener("click", () => {
+        if (window.FundoraSupport && typeof window.FundoraSupport.messages === "function") {
+          window.FundoraSupport.messages();
+          return;
+        }
+        window.location.href = "/portal/support.html";
+      });
+      actions.appendChild(supportBtn);
+      topbar.appendChild(actions);
+    }
   }
 
   function bindAccountForms(user) {
@@ -226,20 +247,101 @@
 
   function bindDemoForms() {
     const supportForm = document.getElementById("supportForm");
-    if (supportForm) {
-      supportForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const notice = document.getElementById("supportNotice");
-        if (notice) notice.hidden = false;
-        supportForm.reset();
-      });
+    const ticketList = document.getElementById("supportTicketList");
+    const notice = document.getElementById("supportNotice");
+
+    async function loadSupportTickets() {
+      if (!ticketList) return;
+      try {
+        const res = await fetch("/api/tickets", { credentials: "same-origin" });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          ticketList.innerHTML =
+            '<div class="empty"><strong>Could not load tickets</strong><p>Try again shortly.</p></div>';
+          return;
+        }
+        const tickets = data.tickets || [];
+        if (!tickets.length) {
+          ticketList.innerHTML =
+            '<div class="empty"><strong>No tickets</strong><p>Send a message to open a conversation with support.</p></div>';
+          return;
+        }
+        ticketList.innerHTML = `
+          <div class="table-wrap">
+            <table class="data">
+              <thead><tr><th>Subject</th><th>Status</th><th>Updated</th><th>Last message</th></tr></thead>
+              <tbody>
+                ${tickets
+                  .map(
+                    (t) =>
+                      `<tr>
+                        <td>${t.subject || "Support"}</td>
+                        <td><span class="pill">${String(t.status || "").replace("_", " ")}</span></td>
+                        <td>${t.updatedAt ? new Date(t.updatedAt).toLocaleString() : "—"}</td>
+                        <td>${t.lastMessage || "—"}</td>
+                      </tr>`
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </div>`;
+      } catch (_) {
+        ticketList.innerHTML =
+          '<div class="empty"><strong>Network error</strong><p>Could not reach support API.</p></div>';
+      }
     }
+
+    if (supportForm) {
+      supportForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const subjectEl = document.getElementById("subject");
+        const messageEl = document.getElementById("message");
+        const topicEl = document.getElementById("topic");
+        const subject = (subjectEl && subjectEl.value.trim()) || "Portal support";
+        const message = messageEl ? messageEl.value.trim() : "";
+        const topic = topicEl ? topicEl.value : "";
+        if (!message) return;
+        try {
+          const res = await fetch("/api/tickets", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              subject: topic ? `${topic}: ${subject}` : subject,
+              message,
+            }),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            if (notice) {
+              notice.hidden = false;
+              notice.textContent = data.error || "Could not send ticket.";
+            }
+            return;
+          }
+          supportForm.reset();
+          if (notice) {
+            notice.hidden = false;
+            notice.textContent =
+              "Ticket sent — support will reply in Call. Check Messages on the site chat too.";
+          }
+          await loadSupportTickets();
+        } catch (_) {
+          if (notice) {
+            notice.hidden = false;
+            notice.textContent = "Network error — try again.";
+          }
+        }
+      });
+      loadSupportTickets();
+    }
+
     const settingsForm = document.getElementById("settingsForm");
     if (settingsForm) {
       settingsForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const notice = document.getElementById("settingsNotice");
-        if (notice) notice.hidden = false;
+        const settingsNotice = document.getElementById("settingsNotice");
+        if (settingsNotice) settingsNotice.hidden = false;
       });
     }
   }

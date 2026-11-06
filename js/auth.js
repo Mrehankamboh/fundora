@@ -182,10 +182,59 @@
     }
   }
 
-  /* Google button — demo notice until OAuth wired */
-  document.querySelectorAll("[data-google-auth]").forEach((btn) => {
+  function showGoogleNote(message, isError) {
+    const glass = document.querySelector(".glass");
+    if (!glass) return;
+    let el = glass.querySelector(".auth-google-note");
+    if (!el) {
+      el = document.createElement("p");
+      el.className = "auth-google-note";
+      const btn = glass.querySelector("[data-google-auth], .btn-google");
+      if (btn && btn.parentNode) btn.parentNode.insertBefore(el, btn.nextSibling);
+      else glass.prepend(el);
+    }
+    el.textContent = message;
+    el.style.cssText = isError
+      ? "color:#f87171;font-size:0.88rem;margin:0.75rem 0 0;padding:0.65rem 0.8rem;border:1px solid rgba(248,113,113,0.35);border-radius:10px;background:rgba(248,113,113,0.08)"
+      : "color:#7eb6ff;font-size:0.88rem;margin:0.75rem 0 0;padding:0.65rem 0.8rem;border:1px solid rgba(126,182,255,0.28);border-radius:10px;background:rgba(59,130,246,0.08)";
+  }
+
+  const params = new URLSearchParams(location.search);
+  const google = params.get("google");
+  if (google === "denied") {
+    showGoogleNote("Google sign-in was cancelled.", true);
+  } else if (google === "config") {
+    showGoogleNote(
+      "Google login is not set up yet. Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env.local, then restart the server.",
+      true
+    );
+  } else if (google === "invalid") {
+    showGoogleNote(
+      "Google sign-in expired or origin mismatch. Open http://127.0.0.1:5173 (not localhost) and try again.",
+      true
+    );
+  } else if (google === "secret") {
+    showGoogleNote(
+      "Google Client Secret is invalid. Reset the secret in Google Cloud and paste the new value in .env.local.",
+      true
+    );
+  } else if (google === "redirect") {
+    showGoogleNote(
+      "Google redirect URI mismatch. Add http://127.0.0.1:5173/api/auth/google/callback in Google Cloud OAuth settings.",
+      true
+    );
+  } else if (google === "blocked") {
+    showGoogleNote("This account is blocked. Contact support.", true);
+  } else if (google) {
+    showGoogleNote(
+      "Google sign-in failed. Add your Gmail as a Test user in Google Cloud (if app is in Testing), then try again.",
+      true
+    );
+  }
+
+  document.querySelectorAll("[data-google-auth], .btn-google").forEach((btn) => {
     btn.addEventListener("click", () => {
-      alert("Google sign-in will connect after OAuth credentials are added. Use email register/login for now.");
+      location.href = "/api/auth/google";
     });
   });
 })();

@@ -298,6 +298,34 @@ img {
   min-width: 0;
 }
 
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.topbar-support {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 40px;
+  padding: 0.45rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(126, 182, 255, 0.28);
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--blue-soft);
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.topbar-support:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(126, 182, 255, 0.45);
+  color: var(--text);
+}
+
 .topbar h1 {
   font-family: var(--font-display);
   font-size: clamp(1.55rem, 2.4vw, 2rem);

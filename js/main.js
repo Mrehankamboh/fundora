@@ -118,6 +118,7 @@
   }
 
   function render() {
+    if (!summaryType || !summaryPrice) return;
     const plan = PLANS[type];
     const price = plan.prices[size];
     summaryType.textContent = `${typeLabel(type)} · ${sizeLabel(size)}`;
@@ -133,6 +134,33 @@
     if (metricDays) metricDays.textContent = plan.days;
     pulse();
   }
+
+  function applyLivePrices(rows) {
+    if (!Array.isArray(rows) || !rows.length) return;
+    rows.forEach((row) => {
+      const name = String(row.challengeName || row.challenge_name || "")
+        .trim()
+        .toLowerCase();
+      const accountSize = Number(row.accountSize != null ? row.accountSize : row.account_size);
+      const price = Number(row.price);
+      if (!Number.isFinite(accountSize) || !Number.isFinite(price)) return;
+      let key = "";
+      if (name.includes("1")) key = "1-step";
+      else if (name.includes("2")) key = "2-step";
+      if (!key || !PLANS[key]) return;
+      PLANS[key].prices[accountSize] = price;
+    });
+    render();
+  }
+
+  fetch("/api/prices", { credentials: "same-origin" })
+    .then((r) => r.json())
+    .then((data) => {
+      if (data && data.ok) applyLivePrices(data.prices);
+    })
+    .catch(() => {
+      /* keep seeded PLANS fallback */
+    });
 
   typeBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
