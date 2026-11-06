@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Fundora Portal</title>
+  <link rel="icon" href="../images/logo-fundora.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/portal.css?v=4" />
+  <link rel="stylesheet" href="../css/support-widget.css?v=9" />
+</head>
+<body data-page="checkout">
+  <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+  <div class="portal">
+    <aside class="sidebar" id="sidebar" aria-label="Portal navigation">
+      <a class="sidebar-brand" href="/portal/index.html">
+        <img src="../images/logo-fundora.jpg" alt="" width="40" height="40" />
+        <span>Fundora</span>
+      </a>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-foot">
+        <div class="user-chip">
+          <div class="user-avatar" id="userAvatar">F</div>
+          <div class="user-meta">
+            <strong id="userName">Trader</strong>
+            <span id="userEmail">—</span>
+          </div>
+        </div>
+        <button class="btn-logout" type="button" id="logoutBtn">Logout</button>
+      </div>
+    </aside>
+    <div class="portal-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" type="button" id="sidebarToggle" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+          <h1>Checkout</h1>
+        </div>
+        <span class="status-badge">Secure payment</span>
+      </header>
+      <main class="content">
+        <p class="notice" id="checkoutNotice" hidden></p>
+        <div class="checkout-grid" id="checkoutRoot">
+          <section class="card">
+            <div class="card-head">
+              <div>
+                <h2>Order summary</h2>
+                <p class="card-sub">Review your challenge before paying.</p>
+              </div>
+            </div>
+            <ul class="checkout-summary" id="orderSummary">
+              <li><span>Loading…</span><strong>—</strong></li>
+            </ul>
+            <div class="checkout-total">
+              <span>Total due</span>
+              <strong id="orderTotal">—</strong>
+            </div>
+          </section>
+
+          <section class="card" id="payPanel">
+            <div class="card-head">
+              <div>
+                <h2>Payment method</h2>
+                <p class="card-sub">Same flow as major prop firms — pay first, then activate.</p>
+              </div>
+            </div>
+            <div class="pay-methods" role="tablist" aria-label="Payment methods">
+              <button type="button" class="pay-method is-on" data-method="card" id="methodCard">
+                <strong>Card</strong>
+                <span>Visa · Mastercard · Stripe</span>
+              </button>
+              <button type="button" class="pay-method" data-method="crypto" id="methodCrypto">
+                <strong>Crypto</strong>
+                <span>USDT transfer</span>
+              </button>
+            </div>
+
+            <div class="pay-panel" id="panelCard">
+              <p class="stat-note">You will complete payment on Stripe’s secure page. Challenge activates after the charge succeeds.</p>
+              <button class="btn btn-solid" type="button" id="payCardBtn">Pay with card</button>
+              <p class="stat-note" id="demoCardHint" hidden>Stripe keys not set — use Demo pay to activate locally.</p>
+              <button class="btn btn-ghost" type="button" id="payDemoBtn" hidden>Demo pay (local)</button>
+            </div>
+
+            <div class="pay-panel" id="panelCrypto" hidden>
+              <div class="crypto-box" id="cryptoBox">
+                <p class="stat-note">Send the exact fee in USDT, then confirm below.</p>
+                <p><span class="muted">Network</span> <strong id="cryptoNetwork">TRC20</strong></p>
+                <p><span class="muted">Amount</span> <strong id="cryptoAmount">—</strong></p>
+                <label class="field-label" for="cryptoAddress">USDT address</label>
+                <div class="copy-row">
+                  <input id="cryptoAddress" readonly value="Not configured" />
+                  <button class="btn btn-ghost" type="button" id="copyCryptoBtn">Copy</button>
+                </div>
+              </div>
+              <button class="btn btn-solid" type="button" id="payCryptoBtn">I’ve sent payment</button>
+            </div>
+          </section>
+
+          <section class="card" id="successPanel" hidden>
+            <div class="card-head">
+              <div>
+                <h2>Payment successful</h2>
+                <p class="card-sub">Your challenge is active.</p>
+              </div>
+            </div>
+            <p class="stat-note" id="successDetail"></p>
+            <div class="form-actions">
+              <a class="btn btn-solid" href="/portal/challenges.html">View challenges</a>
+              <a class="btn btn-ghost" href="/portal/billing.html">Billing & invoices</a>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="../js/portal.js?v=4"></script>
+  <script src="../js/support-widget.js?v=8"></script>
+</body>
+</html>

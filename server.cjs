@@ -130,10 +130,20 @@ function lanAddresses() {
   const nets = os.networkInterfaces();
   for (const name of Object.keys(nets || {})) {
     for (const net of nets[name] || []) {
-      if (net.family === "IPv4" && !net.internal) list.push(net.address);
+      const family = String(net.family);
+      if ((family === "IPv4" || family === "4") && !net.internal) {
+        // Skip APIPA / link-local
+        if (String(net.address).startsWith("169.254.")) continue;
+        list.push(net.address);
+      }
     }
   }
-  return list;
+  // Prefer typical LAN (192.168 / 10.) before hotspot/ICS adapters
+  return [...new Set(list)].sort((a, b) => {
+    const rank = (ip) =>
+      ip.startsWith("192.168.") || ip.startsWith("10.") ? 0 : 1;
+    return rank(a) - rank(b) || a.localeCompare(b);
+  });
 }
 
 server.listen(PORT, "0.0.0.0", () => {

@@ -75,18 +75,38 @@ function request(method, urlPath, body, cookie) {
   const me = await request("GET", "/api/auth/me", null, cookie);
   console.log("me", me.status, me.json.ok, me.json.user && me.json.user.email);
 
-  const ch = await request(
+  const order = await request(
     "POST",
-    "/api/challenges",
-    { evaluationType: "1-step", accountSize: 25000 },
+    "/api/checkout/create",
+    { evaluationType: "1-step", accountSize: 25000, paymentMethod: "demo" },
     cookie
   );
-  console.log("challenge", ch.status, ch.json.ok, ch.json.challenge && ch.json.challenge.fee);
+  console.log("checkout create", order.status, order.json.ok, order.json.order && order.json.order.fee);
+
+  const paid = await request(
+    "POST",
+    "/api/checkout/confirm",
+    { orderId: order.json.order && order.json.order.id, mode: "demo" },
+    cookie
+  );
+  console.log(
+    "checkout confirm",
+    paid.status,
+    paid.json.ok,
+    paid.json.challenge && paid.json.challenge.fee
+  );
 
   const forgot = await request("POST", "/api/auth/forgot", { email });
   console.log("forgot", forgot.status, forgot.json.ok, !!forgot.json.devToken);
 
-  if (!health.json.ok || !reg.json.ok || !me.json.ok || !ch.json.ok || !forgot.json.ok) {
+  if (
+    !health.json.ok ||
+    !reg.json.ok ||
+    !me.json.ok ||
+    !order.json.ok ||
+    !paid.json.ok ||
+    !forgot.json.ok
+  ) {
     process.exit(1);
   }
   console.log("e2e ok");

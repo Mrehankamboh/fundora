@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/portal.css?v=3" />
+  <link rel="stylesheet" href="../css/portal.css?v=4" />
   <link rel="stylesheet" href="../css/support-widget.css?v=9" />
 </head>
 <body data-page="challenges">
@@ -42,28 +42,49 @@
         <span class="status-badge">Select a plan</span>
       </header>
       <main class="content">
-        <p class="notice"><strong>UI preview.</strong> Purchase will connect later.</p>
+        <p class="notice"><strong>Checkout ready.</strong> Pick a size, then pay by card or crypto — the challenge activates after payment.</p>
         <section class="grid-2">
           <article class="card challenge-card">
-            <div class="challenge-top"><div><span class="challenge-tag">Faster</span><h2 class="card-title" style="margin-top:0.65rem">1-Step Challenge</h2><p class="card-sub">Single evaluation. Hit the target once and move to funded.</p></div><p class="stat-value">From $149</p></div>
+            <div class="challenge-top"><div><span class="challenge-tag">Faster</span><h2 class="card-title" style="margin-top:0.65rem">1-Step Challenge</h2><p class="card-sub">Single evaluation. Hit the target once and move to funded.</p></div><p class="stat-value" data-from-price="1-step">From $59</p></div>
             <ul class="rule-list"><li><span>Profit target</span><strong>10%</strong></li><li><span>Max daily loss</span><strong>5%</strong></li><li><span>Max overall loss</span><strong>10%</strong></li><li><span>Min trading days</span><strong>5</strong></li><li><span>Reward split</span><strong>80%</strong></li><li><span>Sizes</span><strong>$5K–$200K</strong></li></ul>
-            <div class="progress" aria-hidden="true"><i style="width:0%"></i></div>
-            <p class="stat-note">Progress: not started</p>
-            <button class="btn btn-solid" type="button" data-start-challenge="1-step" data-size="25000">Start 1-Step ($25K)</button>
+            <div class="challenge-buy-row">
+              <label class="sr-only" for="size-1-step">Account size</label>
+              <select id="size-1-step" data-challenge-size="1-step">
+                <option value="5000">$5,000</option>
+                <option value="10000">$10,000</option>
+                <option value="25000" selected>$25,000</option>
+                <option value="50000">$50,000</option>
+                <option value="100000">$100,000</option>
+                <option value="200000">$200,000</option>
+              </select>
+              <button class="btn btn-solid" type="button" data-checkout-challenge="1-step">Continue to checkout</button>
+            </div>
           </article>
           <article class="card challenge-card">
-            <div class="challenge-top"><div><span class="challenge-tag">Classic</span><h2 class="card-title" style="margin-top:0.65rem">2-Step Challenge</h2><p class="card-sub">Phase 1 + Phase 2 with staged targets.</p></div><p class="stat-value">From $99</p></div>
+            <div class="challenge-top"><div><span class="challenge-tag">Classic</span><h2 class="card-title" style="margin-top:0.65rem">2-Step Challenge</h2><p class="card-sub">Phase 1 + Phase 2 with staged targets.</p></div><p class="stat-value" data-from-price="2-step">From $49</p></div>
             <ul class="rule-list"><li><span>Phase 1 target</span><strong>8%</strong></li><li><span>Phase 2 target</span><strong>5%</strong></li><li><span>Max daily loss</span><strong>5%</strong></li><li><span>Max overall loss</span><strong>10%</strong></li><li><span>Reward split</span><strong>80%</strong></li><li><span>Sizes</span><strong>$5K–$200K</strong></li></ul>
-            <div class="progress" aria-hidden="true"><i style="width:0%"></i></div>
-            <p class="stat-note">Progress: not started</p>
-            <button class="btn btn-ghost" type="button" data-start-challenge="2-step" data-size="25000">Start 2-Step ($25K)</button>
+            <div class="challenge-buy-row">
+              <label class="sr-only" for="size-2-step">Account size</label>
+              <select id="size-2-step" data-challenge-size="2-step">
+                <option value="5000">$5,000</option>
+                <option value="10000">$10,000</option>
+                <option value="25000" selected>$25,000</option>
+                <option value="50000">$50,000</option>
+                <option value="100000">$100,000</option>
+                <option value="200000">$200,000</option>
+              </select>
+              <button class="btn btn-ghost" type="button" data-checkout-challenge="2-step">Continue to checkout</button>
+            </div>
           </article>
         </section>
-        <section class="card"><div class="card-head"><div><h2>Your challenges</h2><p class="card-sub">Active and past evaluations.</p></div></div><div class="empty"><strong>No challenges yet</strong><p>Purchased plans will appear here.</p></div></section>
+        <section class="card" id="yourChallengesCard">
+          <div class="card-head"><div><h2>Your challenges</h2><p class="card-sub">Active and past evaluations.</p></div></div>
+          <div class="empty"><strong>No challenges yet</strong><p>Purchased plans will appear here after checkout.</p></div>
+        </section>
       </main>
     </div>
   </div>
-  <script src="../js/portal.js?v=3"></script>
+  <script src="../js/portal.js?v=4"></script>
   <script src="../js/support-widget.js?v=8"></script>
 </body>
 </html>
