@@ -220,7 +220,7 @@
     );
   } else if (google === "redirect") {
     showGoogleNote(
-      "Google redirect URI mismatch. Add http://127.0.0.1:5173/api/auth/google/callback in Google Cloud OAuth settings.",
+      "Google redirect URI mismatch. Open the site at http://127.0.0.1:5173 and try again.",
       true
     );
   } else if (google === "blocked") {

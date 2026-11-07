@@ -4,6 +4,8 @@ const {
   stateCookie,
   buildGoogleAuthUrl,
   redirect,
+  requestOrigin,
+  oauthOrigin,
 } = require("../../lib/google");
 const { json } = require("../../lib/auth");
 
@@ -24,6 +26,13 @@ module.exports = async function handler(req, res) {
       error:
         "Google login is not configured. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET.",
     });
+    return;
+  }
+
+  const canonical = oauthOrigin();
+  const here = requestOrigin(req);
+  if (here && canonical && here !== canonical) {
+    redirect(res, `${canonical}/api/auth/google`);
     return;
   }
 
