@@ -24,17 +24,25 @@
     return document.body.getAttribute("data-page") || "dashboard";
   }
 
-  function renderNav() {
-    const nav = document.getElementById("sidebarNav") || document.querySelector(".sidebar-nav");
-    if (!nav) return;
+  function navMarkup() {
     const active = currentPageId();
-    nav.innerHTML = NAV.map((item) => {
+    return NAV.map((item) => {
       const on = item.id === active ? " is-active" : "";
       return `<a class="${on.trim()}" href="${item.href}" data-nav="${item.id}">
         <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${item.icon}</svg>
         ${item.label}
       </a>`;
     }).join("");
+  }
+
+  function renderNav() {
+    const nav = document.getElementById("sidebarNav") || document.querySelector(".sidebar-nav");
+    if (!nav) return;
+    const active = currentPageId();
+    if (!nav.querySelector("[data-nav]")) nav.innerHTML = navMarkup();
+    nav.querySelectorAll("[data-nav]").forEach((link) => {
+      link.classList.toggle("is-active", link.getAttribute("data-nav") === active);
+    });
   }
 
   function fillUser(user) {
@@ -678,7 +686,6 @@
       return;
     }
 
-    renderNav();
     fillUser(user);
     bindShell();
     bindAccountForms(user);
@@ -689,5 +696,6 @@
     if (currentPageId() === "rewards") bindRewardsPage();
   }
 
+  renderNav();
   boot();
 })();
