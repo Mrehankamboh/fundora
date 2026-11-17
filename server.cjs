@@ -124,27 +124,7 @@ const server = http.createServer((req, res) => {
   });
 });
 
-function lanAddresses() {
-  const os = require("os");
-  const list = [];
-  const nets = os.networkInterfaces();
-  for (const name of Object.keys(nets || {})) {
-    for (const net of nets[name] || []) {
-      const family = String(net.family);
-      if ((family === "IPv4" || family === "4") && !net.internal) {
-        // Skip APIPA / link-local
-        if (String(net.address).startsWith("169.254.")) continue;
-        list.push(net.address);
-      }
-    }
-  }
-  // Prefer typical LAN (192.168 / 10.) before hotspot/ICS adapters
-  return [...new Set(list)].sort((a, b) => {
-    const rank = (ip) =>
-      ip.startsWith("192.168.") || ip.startsWith("10.") ? 0 : 1;
-    return rank(a) - rank(b) || a.localeCompare(b);
-  });
-}
+const { lanAddresses } = require("./lib/lan");
 
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`Fundora (static + Neon API)`);

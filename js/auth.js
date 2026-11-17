@@ -60,7 +60,7 @@
     fetch("/api/auth/me", { credentials: "same-origin" })
       .then((r) => r.json())
       .then((data) => {
-        if (data && data.ok) location.replace("/portal/index.html");
+        if (data && data.ok) location.replace(safeNext() || "/portal/index.html");
       })
       .catch(() => {});
   }
@@ -112,12 +112,18 @@
             showFormError(form, data.error || "Invalid email or password");
             return;
           }
-          location.href = data.redirect || "/portal/index.html";
+          location.href = safeNext() || data.redirect || "/portal/index.html";
         } catch {
           showFormError(form, "Could not reach server. Start with npm run dev.");
         }
       });
     }
+  }
+
+  function safeNext() {
+    const next = new URLSearchParams(location.search).get("next") || "";
+    if (!next.startsWith("/portal/") || next.startsWith("//") || next.includes("\\")) return "";
+    return next;
   }
 
   if (isForgotPage) {

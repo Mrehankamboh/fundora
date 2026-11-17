@@ -253,6 +253,28 @@
     animNodes.forEach((el) => el.classList.add("is-in"));
   }
 
+  document.querySelectorAll(".spot-card").forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.08}s`;
+  });
+
+  if (!reduceMotion) {
+    document.querySelectorAll(".spot-face").forEach((card) => {
+      card.addEventListener("pointermove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+        card.style.setProperty("--mx", `${(px * 100).toFixed(1)}%`);
+        card.style.setProperty("--my", `${(py * 100).toFixed(1)}%`);
+        card.style.setProperty("--ry", `${((px - 0.5) * 7).toFixed(2)}deg`);
+        card.style.setProperty("--rx", `${((0.5 - py) * 7).toFixed(2)}deg`);
+      });
+      card.addEventListener("pointerleave", () => {
+        card.style.setProperty("--rx", "0deg");
+        card.style.setProperty("--ry", "0deg");
+      });
+    });
+  }
+
   /* Navbar scroll state */
   const header = document.querySelector(".site-header");
   let ticking = false;

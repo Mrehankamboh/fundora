@@ -12,4 +12,9 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
-.neon/
+.neon
+dist/
+.vercel/
+
+.vercel
+.env*

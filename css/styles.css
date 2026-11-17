@@ -732,6 +732,138 @@ p {
   letter-spacing: 0.03em;
 }
 
+/* —— Program cards —— */
+.spotlights {
+  border-top: 1px solid var(--line-soft);
+  background:
+    radial-gradient(ellipse 55% 40% at 80% 0%, rgba(59, 130, 246, 0.12), transparent 60%),
+    linear-gradient(180deg, #07111f, var(--bg) 70%);
+}
+
+.spotlights .section-inner {
+  max-width: min(1240px, calc(100% - 2rem));
+}
+
+.spot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.spot-card {
+  min-width: 0;
+}
+
+.spot-face {
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  --my: 20%;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  min-height: 100%;
+  padding: 1.45rem 1.3rem 1.25rem;
+  border-radius: 18px;
+  background: linear-gradient(165deg, rgba(18, 34, 62, 0.95), rgba(7, 14, 28, 0.96));
+  border: 1px solid rgba(148, 180, 255, 0.16);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+  transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.45s var(--ease), border-color 0.4s var(--ease), box-shadow 0.45s var(--ease);
+  overflow: hidden;
+}
+
+.spot-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(280px circle at var(--mx) var(--my), rgba(126, 182, 255, 0.28), transparent 46%);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.spot-face::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: -40%;
+  width: 38%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+  transform: translateX(0);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spot-face:hover,
+.spot-face:focus-within {
+  border-color: rgba(126, 182, 255, 0.62);
+  box-shadow: 0 24px 48px rgba(2, 8, 20, 0.45), 0 0 0 1px rgba(59, 130, 246, 0.18);
+}
+
+.spot-face:hover::before,
+.spot-face:focus-within::before {
+  opacity: 1;
+}
+
+.spot-face:hover::after,
+.spot-face:focus-within::after {
+  opacity: 1;
+  animation: cardSheen 0.85s var(--ease);
+}
+
+@keyframes cardSheen {
+  to {
+    transform: translateX(320%);
+  }
+}
+
+.spot-index,
+.spot-face h3,
+.spot-face p,
+.spot-meta {
+  position: relative;
+  z-index: 2;
+}
+
+.spot-index {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--gold-soft);
+}
+
+.spot-face h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 2vw, 2.15rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0;
+}
+
+.spot-face p {
+  margin: 0;
+  color: #c5d0e8;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.spot-meta {
+  margin-top: auto;
+  padding-top: 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 /* —— Features: editorial split list —— */
 .features {
   border-top: 1px solid var(--line-soft);
@@ -1684,6 +1816,18 @@ p {
     opacity: 1 !important;
     transform: none !important;
   }
+
+  .spot-face,
+  .spot-face::after {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .spot-face::before,
+  .spot-face::after {
+    opacity: 0 !important;
+  }
 }
 
 /* —— Responsive —— */
@@ -1742,6 +1886,10 @@ p {
   .faq-intro {
     grid-template-columns: 1fr;
     gap: 2.5rem;
+  }
+
+  .spot-grid {
+    grid-template-columns: 1fr 1fr;
   }
 
   .features-intro {
@@ -1933,6 +2081,10 @@ p {
     gap: 0.45rem;
   }
 
+  .spot-grid {
+    grid-template-columns: 1fr;
+  }
+
   .section-inner {
     padding: 4rem 1.25rem;
   }
@@ -2072,6 +2224,64 @@ p {
 
   .platform-media {
     aspect-ratio: 16 / 11;
+  }
+}
+
+/* LCD and larger: copy stays on the left and scales with the column */
+@media (min-width: 1440px) and (min-height: 800px) {
+  .hero {
+    align-items: center;
+  }
+
+  .hero-inner {
+    grid-template-columns: minmax(0, 1.05fr) minmax(min(480px, 42%), 0.9fr);
+    align-items: center;
+    gap: clamp(1rem, 2vh, 1.6rem) clamp(1.25rem, 2vw, 2.5rem);
+    padding-top: clamp(0.4rem, 2vh, 1.25rem);
+    padding-bottom: clamp(1rem, 3vh, 2.25rem);
+    padding-left: max(1.75rem, 4.5vw);
+    padding-right: max(1rem, 2.5vw);
+  }
+
+  .hero-copy {
+    container-type: inline-size;
+    max-width: none;
+    padding-top: 0;
+  }
+
+  .hero-brand {
+    font-size: clamp(7.6rem, 15cqi, 12rem);
+  }
+
+  .hero-title {
+    font-size: clamp(2.7rem, 7.4cqi, 4.8rem);
+    max-width: 14ch;
+  }
+
+  .hero-sub {
+    font-size: clamp(1.12rem, 2.6cqi, 1.55rem);
+    max-width: 42ch;
+  }
+
+  .hero-meta {
+    max-width: 36rem;
+  }
+
+  .hero-meta dd {
+    font-size: clamp(1.55rem, 4.2cqi, 2.45rem);
+  }
+
+  .hero-globe {
+    width: min(100%, 64vh);
+    max-width: 100%;
+    margin-top: 0;
+    margin-right: 0;
+  }
+}
+
+@media (min-width: 1920px) and (min-height: 960px) {
+  .hero-globe {
+    width: min(100%, 68vh);
   }
 }
 

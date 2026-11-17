@@ -9,6 +9,7 @@
     { id: "billing", href: "/portal/billing.html", label: "Billing", icon: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/>' },
     { id: "certificates", href: "/portal/certificates.html", label: "Certificates", icon: '<circle cx="12" cy="12" r="8"/><path d="m9 12 2 2 4-4"/>' },
     { id: "support", href: "/portal/support.html", label: "Support", icon: '<path d="M8 10a4 4 0 0 1 8 0v2a4 4 0 0 1-8 0v-2z"/><path d="M4 12v1a8 8 0 0 0 16 0v-1M12 21v-2"/>' },
+    { id: "kyc", href: "/portal/kyc.html", label: "Verification", icon: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2"/><path d="M14 10h4M14 14h4"/>' },
     { id: "account", href: "/portal/account.html", label: "Account", icon: '<circle cx="12" cy="8" r="3.5"/><path d="M5 19.5c1.6-3 4-4.5 7-4.5s5.4 1.5 7 4.5"/>' },
     { id: "settings", href: "/portal/settings.html", label: "Settings", icon: '<circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M3 12h2M19 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>' },
   ];
@@ -671,18 +672,24 @@
     }
   }
 
+  function loginNext() {
+    const next = location.pathname + location.search;
+    if (!next.startsWith("/portal/")) return "/login.html";
+    return "/login.html?next=" + encodeURIComponent(next);
+  }
+
   async function boot() {
     let user = null;
     try {
       const res = await fetch("/api/auth/me", { credentials: "same-origin" });
       const data = await res.json();
       if (!data.ok || !data.user) {
-        location.replace("/login.html");
+        location.replace(loginNext());
         return;
       }
       user = data.user;
     } catch {
-      location.replace("/login.html");
+      location.replace(loginNext());
       return;
     }
 
