@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=19" />
+  <link rel="stylesheet" href="css/styles.css?v=20" />
   <link rel="stylesheet" href="css/support-widget.css?v=9" />
 </head>
 <body>
@@ -82,8 +82,9 @@
           </dl>
         </div>
         <div class="hero-visual reveal">
-          <div class="hero-globe fundora-globe" id="heroGlobe" data-size="620" data-min="300">
+          <div class="hero-globe fundora-globe" id="heroGlobe" data-size="620" data-min="200">
             <div class="globe-halo" aria-hidden="true"></div>
+            <div class="globe-fallback" aria-hidden="true"></div>
             <canvas id="globeCanvas" aria-label="Interactive world globe. Drag to rotate."></canvas>
             <p class="globe-hint">Drag to explore</p>
           </div>
@@ -574,7 +575,7 @@
     </div>
   </footer>
 
-  <script src="js/globe.js"></script>
+  <script src="js/globe.js?v=4"></script>
   <script src="js/main.js?v=3"></script>
   <script src="js/support-widget.js?v=8"></script>
 </body>

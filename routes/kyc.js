@@ -2,7 +2,7 @@ const { getSql } = require("../lib/db");
 const { ensureSchema } = require("../lib/schema");
 const { userFromRequest, json, errorMessage } = require("../lib/auth");
 const { readBody, parseMultipart } = require("../lib/multipart");
-const { validatePersonal, validateFiles, mapApplication } = require("../lib/kyc");
+const { validatePersonal, validateLocation, validateFiles, mapApplication } = require("../lib/kyc");
 
 async function latestApplication(sql, userId) {
   const rows = await sql`
@@ -64,20 +64,28 @@ module.exports = async function handler(req, res) {
     const raw = await readBody(req);
     const { fields, files } = parseMultipart(raw, req.headers["content-type"]);
     const personal = validatePersonal(fields);
+    const place = validateLocation(fields);
     const uploaded = validateFiles(files, personal.value.documentType);
     const errors = { ...personal.errors, ...uploaded.errors };
+    if (place.error) errors.location = place.error;
     if (Object.keys(errors).length) {
-      json(res, 400, { ok: false, error: "Check the highlighted fields.", errors });
+      json(res, 400, {
+        ok: false,
+        error: place.error || "Check the highlighted fields.",
+        errors,
+      });
       return;
     }
 
     const value = personal.value;
     const inserted = await sql`
       INSERT INTO kyc_applications (
-        user_id, status, full_name, date_of_birth, country, address, city, postal_code, document_type
+        user_id, status, full_name, date_of_birth, country, address, city, postal_code, document_type,
+        latitude, longitude, location_accuracy
       ) VALUES (
         ${user.id}, 'pending', ${value.fullName}, ${value.dateOfBirth}, ${value.country},
-        ${value.address}, ${value.city}, ${value.postalCode}, ${value.documentType}
+        ${value.address}, ${value.city}, ${value.postalCode}, ${value.documentType},
+        ${place.latitude}, ${place.longitude}, ${place.accuracy}
       )
       RETURNING id
     `;

@@ -216,17 +216,17 @@
     );
   } else if (google === "invalid") {
     showGoogleNote(
-      "Google sign-in expired or origin mismatch. Open http://127.0.0.1:5173 (not localhost) and try again.",
+      "Google sign-in expired. Start again from this site.",
       true
     );
   } else if (google === "secret") {
     showGoogleNote(
-      "Google Client Secret is invalid. Reset the secret in Google Cloud and paste the new value in .env.local.",
+      "Google Client Secret is invalid. Reset the secret in Google Cloud and update the live site.",
       true
     );
   } else if (google === "redirect") {
     showGoogleNote(
-      "Google redirect URI mismatch. Open the site at http://127.0.0.1:5173 and try again.",
+      "Google Cloud is still missing this redirect URI: " + location.origin + "/api/auth/google/callback",
       true
     );
   } else if (google === "blocked") {

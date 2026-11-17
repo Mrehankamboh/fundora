@@ -2,7 +2,15 @@ const { getApiHandler } = require("../lib/api-routes");
 
 function restored(req) {
   const url = new URL(String(req.url || "/"), "http://localhost");
-  const fromQuery = req.query && req.query.__path;
+  const query = req.query || {};
+  for (const [key, value] of Object.entries(query)) {
+    if (url.searchParams.has(key)) continue;
+    const values = Array.isArray(value) ? value : [value];
+    for (const item of values) {
+      if (item != null) url.searchParams.append(key, String(item));
+    }
+  }
+  const fromQuery = query.__path;
   const hinted = url.searchParams.get("__path") || (Array.isArray(fromQuery) ? fromQuery.join("/") : fromQuery || "");
   if (hinted) {
     url.pathname = "/api/" + String(hinted).replace(/^\/+/, "");

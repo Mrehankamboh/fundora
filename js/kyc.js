@@ -173,25 +173,102 @@
     fill(application);
   }
 
+  function isPhone() {
+    return document.documentElement.dataset.kycDevice === "phone";
+  }
+
+  function savedLocation() {
+    try {
+      const loc = JSON.parse(sessionStorage.getItem("fundoraKycLocation") || "null");
+      const latitude = Number(loc && loc.latitude);
+      const longitude = Number(loc && loc.longitude);
+      if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90) return null;
+      if (!Number.isFinite(longitude) || longitude < -180 || longitude > 180) return null;
+      return loc;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function syncLocation(locked) {
+    const gate = document.getElementById("locationGate");
+    const located = !isPhone() || Boolean(savedLocation());
+    if (gate) gate.hidden = locked || !isPhone() || located;
+    if (isPhone() && !locked && !located) form.hidden = true;
+    return located;
+  }
+
   function render(data) {
     const application = data.application;
     if (!application || data.status === "not_started") {
       form.hidden = false;
       statusCard.hidden = true;
       markSteps(1, 0);
+      syncLocation(false);
       return;
     }
     if (application.status === "pending" || application.status === "approved") {
       showLocked(application);
+      syncLocation(true);
       return;
     }
     if (application.status === "rejected") showRejected(application);
+    syncLocation(false);
+  }
+
+  const locationBtn = document.getElementById("locationAllow");
+  const locationNotice = document.getElementById("locationNotice");
+  function setLocationNotice(text, kind) {
+    if (!locationNotice) return;
+    locationNotice.hidden = !text;
+    locationNotice.textContent = text || "";
+    locationNotice.classList.toggle("is-error", kind === "error");
+    locationNotice.classList.toggle("is-ok", kind === "ok");
+  }
+  if (locationBtn) {
+    locationBtn.addEventListener("click", () => {
+      setLocationNotice("");
+      if (!navigator.geolocation || !window.isSecureContext) {
+        setLocationNotice("Location is unavailable on this page. Open the secure site and allow location.", "error");
+        return;
+      }
+      locationBtn.disabled = true;
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          sessionStorage.setItem(
+            "fundoraKycLocation",
+            JSON.stringify({
+              latitude: pos.coords.latitude,
+              longitude: pos.coords.longitude,
+              accuracy: pos.coords.accuracy,
+            })
+          );
+          locationBtn.disabled = false;
+          form.hidden = false;
+          syncLocation(false);
+          setLocationNotice("");
+        },
+        () => {
+          locationBtn.disabled = false;
+          sessionStorage.removeItem("fundoraKycLocation");
+          form.hidden = true;
+          setLocationNotice("Location is off. Allow location for this site, then try again. The next step stays closed.", "error");
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+      );
+    });
   }
 
   if (continueBtn) {
     continueBtn.addEventListener("click", () => {
       clearErrors();
       setNotice("");
+      if (isPhone() && !savedLocation()) {
+        form.hidden = true;
+        syncLocation(false);
+        setLocationNotice("Share your location before the next step.", "error");
+        return;
+      }
       const errors = localErrors();
       if (Object.keys(errors).length) {
         Object.keys(errors).forEach((key) => fieldError(key, errors[key]));
@@ -202,6 +279,8 @@
       window.location.href = "/portal/kyc-document.html";
     });
   }
+
+  syncLocation(false);
 
   fetch("/api/kyc", { credentials: "same-origin" })
     .then((res) => res.json())

@@ -8,7 +8,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/portal.css?v=14" />
+  <link rel="stylesheet" href="../css/portal.css?v=16" />
+  <script>
+    (function () {
+      var ua = navigator.userAgent || "";
+      var phone = /Android|iPhone|iPod|iPad|Mobile/i.test(ua) || window.matchMedia("(pointer: coarse) and (max-width: 900px)").matches;
+      document.documentElement.dataset.kycDevice = phone ? "phone" : "desk";
+    })();
+  </script>
   <link rel="stylesheet" href="../css/support-widget.css?v=9" />
 </head>
 <body data-page="kyc">
@@ -66,6 +73,14 @@
           <li class="kyc-step" data-step="4"><b>4</b><span>Review</span></li>
         </ol>
         <section class="card kyc-status" id="kycStatus" hidden></section>
+        <section class="card location-gate" id="locationGate" hidden>
+          <div class="card-head"><div><h2>Share your location</h2><p class="card-sub">Verification on a phone starts with your current location.</p></div></div>
+          <p>Allow location to continue. If location stays off, the next step does not open.</p>
+          <p class="notice" id="locationNotice" hidden></p>
+          <div class="kyc-actions">
+            <button class="btn btn-solid" id="locationAllow" type="button">Use my location</button>
+          </div>
+        </section>
         <form id="kycForm" action="/api/kyc" method="post" enctype="multipart/form-data">
           <section class="card">
             <div class="card-head"><div><h2>Personal information</h2><p class="card-sub">Use the name and address on your identity document.</p></div></div>
@@ -97,7 +112,7 @@
     </div>
   </div>
   <script src="../js/portal.js?v=7"></script>
-  <script src="../js/kyc.js?v=5"></script>
+  <script src="../js/kyc.js?v=6"></script>
   <script src="../js/support-widget.js?v=8"></script>
 </body>
 </html>

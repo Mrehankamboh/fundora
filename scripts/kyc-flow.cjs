@@ -117,6 +117,9 @@ function cookieHeader(setCookie) {
     city: "Lahore",
     postalCode: "54000",
     documentType: "national_id",
+    latitude: "31.5204",
+    longitude: "74.3587",
+    accuracy: "20",
   };
   const files = {
     front: { name: "front.png", buffer: png },
@@ -167,9 +170,10 @@ function cookieHeader(setCookie) {
   const hidden = await request(5173, "GET", "/api/kyc/file?id=" + docId);
   check("anonymous cannot open file", hidden.status === 401, hidden.status);
 
+  const otherEmail = `kyc_other_${Date.now()}@fundora.test`;
   const other = await jsonRequest(5173, "POST", "/api/auth/register", {
     name: "Other Tester",
-    email: `kyc_other_${Date.now()}@fundora.test`,
+    email: otherEmail,
     password,
     confirm: password,
     country: "Pakistan",
@@ -246,6 +250,7 @@ function cookieHeader(setCookie) {
 
   await sql`DELETE FROM sessions WHERE token = ${token}`;
   await sql`DELETE FROM users WHERE email = ${email}`;
+  await sql`DELETE FROM users WHERE email = ${otherEmail}`;
 
   if (failures.length) {
     console.error("failed", failures.join(", "));

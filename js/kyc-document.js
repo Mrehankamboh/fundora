@@ -82,6 +82,19 @@
     return document.documentElement.dataset.kycDevice === "phone";
   }
 
+  function savedLocation() {
+    try {
+      const loc = JSON.parse(sessionStorage.getItem("fundoraKycLocation") || "null");
+      const latitude = Number(loc && loc.latitude);
+      const longitude = Number(loc && loc.longitude);
+      if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90) return null;
+      if (!Number.isFinite(longitude) || longitude < -180 || longitude > 180) return null;
+      return loc;
+    } catch (_) {
+      return null;
+    }
+  }
+
   async function phoneLink() {
     const path = "/portal/kyc.html";
     try {
@@ -270,7 +283,8 @@
 
   document.getElementById("docSubmit").addEventListener("click", () => {
     const details = personal();
-    if (!details) {
+    const place = savedLocation();
+    if (!details || (isPhone() && !place)) {
       window.location.href = "/portal/kyc.html";
       return;
     }
@@ -281,6 +295,11 @@
     const body = new FormData();
     Object.keys(details).forEach((key) => body.set(key, details[key]));
     body.set("documentType", docType);
+    if (place) {
+      body.set("latitude", String(place.latitude));
+      body.set("longitude", String(place.longitude));
+      if (place.accuracy != null) body.set("accuracy", String(place.accuracy));
+    }
     body.set("front", shots.front);
     body.set("selfie", shots.selfie);
     if (needsBack()) body.set("back", shots.back);
@@ -321,7 +340,10 @@
     xhr.send(body);
   });
 
-  if (!isPhone()) showDesktopLink();
+  if (isPhone() && !savedLocation()) {
+    wizard.hidden = true;
+    window.location.replace("/portal/kyc.html");
+  } else if (!isPhone()) showDesktopLink();
 
   fetch("/api/kyc", { credentials: "same-origin" })
     .then((res) => res.json())
@@ -345,7 +367,7 @@
           '</p><p><a class="btn btn-ghost" href="/portal/kyc.html">Back to verification</a></p>';
         return;
       }
-      if (!personal()) {
+      if (!personal() || (isPhone() && !savedLocation())) {
         window.location.replace("/portal/kyc.html");
         return;
       }

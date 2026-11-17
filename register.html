@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="css/auth.css?v=4" />
   <link rel="stylesheet" href="css/support-widget.css?v=9" />
 </head>
 <body>
@@ -17,8 +17,9 @@
       <a class="logo" href="index.html"><img class="mark" src="images/logo-fundora.jpg" alt="" width="36" height="36" />Fundora</a>
       <div class="brand-stage">
         <h1 class="brand-headline">Begin your<br />evaluation.</h1>
-        <div class="brand-globe fundora-globe" data-size="320" data-min="240">
+        <div class="brand-globe fundora-globe" data-size="320" data-min="180">
           <div class="globe-halo" aria-hidden="true"></div>
+          <div class="globe-fallback" aria-hidden="true"></div>
           <canvas aria-label="Interactive world globe. Drag to rotate."></canvas>
           <p class="globe-hint">Drag to explore</p>
         </div>
@@ -127,8 +128,8 @@
       </div>
     </main>
   </div>
-  <script src="js/globe.js"></script>
-  <script src="js/auth.js"></script>
+  <script src="js/globe.js?v=4"></script>
+  <script src="js/auth.js?v=3"></script>
   <script src="js/support-widget.js?v=8"></script>
 </body>
 </html>

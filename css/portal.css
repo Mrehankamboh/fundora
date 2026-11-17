@@ -1411,6 +1411,15 @@ th {
   transition: width 0.2s linear;
 }
 
+.location-gate p {
+  margin: 0;
+  color: var(--muted, #93a4c7);
+  max-width: 42rem;
+}
+html[data-kyc-device="desk"] #locationGate {
+  display: none !important;
+}
+
 .kyc-actions {
   display: flex;
   align-items: center;
