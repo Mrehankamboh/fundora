@@ -34,7 +34,12 @@
   }
 
   function needsBack() {
-    return true;
+    return docType !== "passport";
+  }
+
+  function syncDocSteps() {
+    const back = document.querySelector('#pictureSystem [data-step="2"]');
+    if (back) back.hidden = docType === "passport";
   }
 
   function markSteps(name) {
@@ -53,6 +58,7 @@
     const system = document.getElementById("pictureSystem");
     if (system) system.hidden = false;
     markSteps(name);
+    syncDocSteps();
     setNotice("");
   }
 
@@ -144,7 +150,13 @@
     if (camModal) camModal.hidden = true;
   }
 
-  async function openCamera(slot) {
+  function nextSlot(slot) {
+    if (slot === "front") return needsBack() ? "back" : "selfie";
+    if (slot === "back") return "selfie";
+    return "";
+  }
+
+  function prepareCamera(slot) {
     camSlot = slot;
     if (camError) camError.textContent = "";
     const selfie = slot === "selfie";
@@ -159,6 +171,11 @@
     if (camGuide) camGuide.classList.toggle("is-face", selfie);
     if (camVideo && camVideo.parentElement) camVideo.parentElement.classList.toggle("is-selfie", selfie);
     if (camModal) camModal.hidden = false;
+  }
+
+  async function openCamera(slot) {
+    prepareCamera(slot);
+    const selfie = slot === "selfie";
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.isSecureContext) {
       if (camError) camError.textContent = "Open this page at http://127.0.0.1:5173 so the camera can start.";
       return;
@@ -217,24 +234,35 @@
           return;
         }
         showShot(slot, new File([blob], slot + "-live.jpg", { type: "image/jpeg" }));
-        closeCamera();
-        if (slot === "front") showPanel("back");
-        else if (slot === "back") showPanel("selfie");
-        else openReview();
+        const next = nextSlot(slot);
+        if (!next) {
+          closeCamera();
+          openReview();
+          return;
+        }
+        showPanel(next);
+        const sameLens = (slot === "selfie") === (next === "selfie");
+        if (sameLens && camStream) prepareCamera(next);
+        else openCamera(next);
       },
       "image/jpeg",
       0.9
     );
   }
 
-  wizard.querySelectorAll('input[name="documentType"]').forEach((input) => {
-    input.addEventListener("change", () => {
+  wizard.querySelectorAll(".doc-choice").forEach((label) => {
+    label.addEventListener("click", () => {
+      const input = label.querySelector('input[name="documentType"]');
+      if (!input) return;
+      input.checked = true;
       docType = input.value;
-      const label = input.parentElement.querySelector("strong").textContent;
-      document.getElementById("frontDocName").textContent = label;
-      document.getElementById("backDocName").textContent = label;
+      const name = label.querySelector("strong").textContent;
+      document.getElementById("frontDocName").textContent = name;
+      document.getElementById("backDocName").textContent = name;
       clearShots();
+      syncDocSteps();
       showPanel("front");
+      openCamera("front");
     });
   });
 
@@ -242,6 +270,12 @@
     if (!shots.selfie) {
       setNotice("Take a live selfie before continuing.", "error");
       return;
+    }
+    const reviewSub = document.querySelector("#panelReview .card-sub");
+    if (reviewSub) {
+      reviewSub.textContent = needsBack()
+        ? "Front, back, and selfie. Submitting does not approve the account."
+        : "Photo page and selfie. Submitting does not approve the account.";
     }
     const review = document.getElementById("reviewShots");
     review.innerHTML = "";
@@ -256,7 +290,11 @@
   }
 
   document.querySelectorAll("[data-back]").forEach((button) => {
-    button.addEventListener("click", () => showPanel(button.getAttribute("data-back")));
+    button.addEventListener("click", () => {
+      let name = button.getAttribute("data-back");
+      if (name === "back" && !needsBack()) name = "front";
+      showPanel(name);
+    });
   });
   document.querySelectorAll("[data-open]").forEach((button) => {
     button.addEventListener("click", () => openCamera(button.getAttribute("data-open")));

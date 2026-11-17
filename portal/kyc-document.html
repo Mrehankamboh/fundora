@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/portal.css?v=16" />
+  <link rel="stylesheet" href="../css/portal.css?v=17" />
   <script>
     (function () {
       var ua = navigator.userAgent || "";
@@ -85,11 +85,29 @@
         </section>
         <div id="docWizard">
           <section class="card" id="panelChoose">
-            <div class="card-head"><div><h2>Choose one document</h2><p class="card-sub">Pick any one. The picture steps open underneath: front, then back, then selfie.</p></div></div>
-            <div class="doc-columns">
-              <label class="doc-choice"><input type="radio" name="documentType" value="national_id" /><span><strong>ID card</strong><small>Front, back, selfie</small></span></label>
-              <label class="doc-choice"><input type="radio" name="documentType" value="passport" /><span><strong>Passport</strong><small>Front, back, selfie</small></span></label>
-              <label class="doc-choice"><input type="radio" name="documentType" value="driving_licence" /><span><strong>Driving licence</strong><small>Front, back, selfie</small></span></label>
+            <div class="card-head"><div><h2>Choose one document</h2><p class="card-sub">Tap a row. The camera opens for the front side.</p></div></div>
+            <div class="doc-rows">
+              <label class="doc-choice">
+                <input type="radio" name="documentType" value="national_id" />
+                <span>
+                  <i class="doc-art doc-art-id" aria-hidden="true"></i>
+                  <em><strong>ID card</strong><small>Front, back, then selfie</small></em>
+                </span>
+              </label>
+              <label class="doc-choice">
+                <input type="radio" name="documentType" value="passport" />
+                <span>
+                  <i class="doc-art doc-art-passport" aria-hidden="true"></i>
+                  <em><strong>Passport</strong><small>Photo page, then selfie</small></em>
+                </span>
+              </label>
+              <label class="doc-choice">
+                <input type="radio" name="documentType" value="driving_licence" />
+                <span>
+                  <i class="doc-art doc-art-licence" aria-hidden="true"></i>
+                  <em><strong>Driving licence</strong><small>Front, back, then selfie</small></em>
+                </span>
+              </label>
             </div>
           </section>
           <div id="pictureSystem" hidden>
@@ -164,8 +182,8 @@
               <div class="cam-guide" id="camGuide"></div>
             </div>
             <div class="cam-actions">
-              <button type="button" class="btn btn-solid" id="camShutter">Capture</button>
               <button type="button" class="btn btn-ghost" id="camClose">Cancel</button>
+              <button type="button" class="btn btn-solid cam-shutter" id="camShutter" aria-label="Capture">Capture</button>
             </div>
             <p class="field-error" id="camError"></p>
           </div>
@@ -174,7 +192,7 @@
     </div>
   </div>
   <script src="../js/portal.js?v=7"></script>
-  <script src="../js/kyc-document.js?v=10"></script>
+  <script src="../js/kyc-document.js?v=12"></script>
   <script src="../js/support-widget.js?v=8"></script>
 </body>
 </html>
