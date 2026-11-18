@@ -302,13 +302,34 @@
     startPolling();
   }
 
+  document.querySelectorAll('a[href="#support"]').forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      history.replaceState(null, "", "#support");
+      setOpen(true);
+      setView("home");
+    });
+  });
+
+  const clearSupportHash = () => {
+    if (!/#support\b/i.test(window.location.hash)) return;
+    const clean = window.location.pathname + window.location.search;
+    history.replaceState(null, "", clean || "/");
+  };
+
   const bootOpen = () => {
     if (!wantOpen()) return;
     setOpen(true);
     setView("home");
   };
 
-  bootOpen();
+  const navEntry = performance.getEntriesByType("navigation")[0];
+  const reloaded = navEntry && navEntry.type === "reload";
+  if (reloaded) {
+    clearSupportHash();
+    setOpen(false);
+  } else {
+    bootOpen();
+  }
   window.addEventListener("hashchange", bootOpen);
-  window.setTimeout(bootOpen, 0);
 })();

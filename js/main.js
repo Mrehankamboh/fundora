@@ -275,6 +275,67 @@
     });
   }
 
+  /* FAQ open and close */
+  document.querySelectorAll(".faq-item").forEach((item) => {
+    const summary = item.querySelector("summary");
+    const body = item.querySelector(".faq-a");
+    if (!summary || !body) return;
+    let token = 0;
+    summary.addEventListener("click", (event) => {
+      event.preventDefault();
+      const my = ++token;
+      if (body._faqAnim) body._faqAnim.cancel();
+      if (reduceMotion) {
+        item.classList.remove("is-closing");
+        item.open = !item.open;
+        body.style.height = "";
+        return;
+      }
+      const current = body.getBoundingClientRect().height;
+      const shouldClose = item.open && !item.classList.contains("is-closing");
+      const ease = "cubic-bezier(0.22, 1, 0.36, 1)";
+      if (shouldClose) {
+        item.classList.add("is-closing");
+        const from = Math.max(current, body.scrollHeight);
+        body.style.height = from + "px";
+        const anim = body.animate(
+          [{ height: from + "px" }, { height: "0px" }],
+          { duration: 480, easing: ease, fill: "forwards" }
+        );
+        body._faqAnim = anim;
+        const settle = () => {
+          if (my !== token) return;
+          token += 1;
+          anim.cancel();
+          item.open = false;
+          item.classList.remove("is-closing");
+          body.style.height = "";
+        };
+        anim.onfinish = settle;
+        window.setTimeout(settle, 520);
+        return;
+      }
+      item.classList.remove("is-closing");
+      item.open = true;
+      body.style.height = "auto";
+      const full = Math.max(body.scrollHeight, current);
+      body.style.height = current + "px";
+      const anim = body.animate(
+        [{ height: current + "px" }, { height: full + "px" }],
+        { duration: 480, easing: ease, fill: "forwards" }
+      );
+      body._faqAnim = anim;
+      const settle = () => {
+        if (my !== token) return;
+        token += 1;
+        anim.cancel();
+        body.style.height = "auto";
+      };
+      anim.onfinish = settle;
+      window.setTimeout(settle, 520);
+    });
+  });
+
   /* Navbar scroll state */
   const header = document.querySelector(".site-header");
   let ticking = false;

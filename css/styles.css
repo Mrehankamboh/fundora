@@ -1707,7 +1707,7 @@ p {
   font-weight: 400;
   font-size: 1.25rem;
   line-height: 1;
-  transition: background 0.22s, border-color 0.22s, transform 0.22s var(--ease);
+  transition: background 0.22s, border-color 0.22s, transform 0.45s var(--ease);
 }
 
 .faq-item[open] summary::after {
@@ -1721,13 +1721,23 @@ p {
   background: rgba(59, 130, 246, 0.07);
 }
 
+.faq-item::details-content {
+  transition: none;
+}
+
 .faq-a {
-  padding: 0 clamp(1.25rem, 2.5vw, 2rem) clamp(1.35rem, 2.4vw, 1.85rem);
-  padding-left: calc(clamp(1.25rem, 2.5vw, 2rem) + 2ch + 1.25rem);
+  overflow: hidden;
+  height: 0;
+}
+
+.faq-item[open] .faq-a {
+  height: auto;
 }
 
 .faq-a p {
   margin: 0;
+  padding: 0 clamp(1.25rem, 2.5vw, 2rem) clamp(1.35rem, 2.4vw, 1.85rem);
+  padding-left: calc(clamp(1.25rem, 2.5vw, 2rem) + 2ch + 1.25rem);
   color: var(--muted);
   font-size: 1.02rem;
   line-height: 1.65;
@@ -1830,9 +1840,14 @@ p {
   .fade-right,
   .scale-in,
   .load-curtain,
-  .globe-halo::after {
+  .globe-halo::after,
+  .faq-a,
+  .faq-item summary::after {
     transition: none !important;
     animation: none !important;
+  }
+
+  .globe-halo::after {
     opacity: 1 !important;
     transform: none !important;
   }
@@ -1966,7 +1981,7 @@ p {
     position: static;
   }
 
-  .faq-a {
+  .faq-a p {
     padding-left: clamp(1.25rem, 2.5vw, 2rem);
   }
 
@@ -2293,7 +2308,7 @@ p {
     padding: 1.1rem 1rem;
   }
 
-  .faq-a {
+  .faq-a p {
     padding: 0 1rem 1.2rem;
   }
 
